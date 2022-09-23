@@ -1,9 +1,13 @@
-package com.C706Back.entity;
+package com.C706Back.models.entity;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
+@Getter @Setter
 public class User {
 
     @Id
@@ -18,7 +22,8 @@ public class User {
 
     private String address;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
+
+    public User() {}
 
 }

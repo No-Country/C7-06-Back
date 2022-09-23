@@ -1,9 +1,12 @@
-package com.C706Back.entity;
+package com.C706Back.models.entity;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "picture")
+@Getter @Setter
 public class Picture {
 
     @Id
@@ -13,8 +16,7 @@ public class Picture {
     @Lob
     private byte[] content;
 
-    @Column(name = "content_type")
     private String contentType;
 
-
+    public Picture() {}
 }

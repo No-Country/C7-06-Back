@@ -1,4 +1,4 @@
-package com.C706Back.entity;
+package com.C706Back.models.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "location")
 @Getter @Setter
 public class Location {
 
@@ -15,4 +14,6 @@ public class Location {
     private Long id;
 
     private String name;
+
+    public Location() {}
 }

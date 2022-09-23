@@ -1,12 +1,14 @@
-package com.C706Back.entity;
+package com.C706Back.models.entity;
 
+import com.C706Back.models.enums.AnimalType;
+import com.C706Back.models.enums.Gender;
+import com.C706Back.models.enums.Size;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "location")
 @Getter @Setter
 public class Pet {
 
@@ -14,17 +16,15 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "pure_race")
     private boolean pureRace;
 
     private int age;
 
-    @JoinColumn(name = "id_location", unique = true)
     @ManyToOne
+    @JoinColumn(name = "id_location", unique = true)
     private Location location;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "animal_type")
     private AnimalType animalType;
 
     private String race;
@@ -35,8 +35,7 @@ public class Pet {
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "vaccinations_up_to_date")
     private boolean vaccinationsUpToDate;
 
-
+    public Pet() {}
 }

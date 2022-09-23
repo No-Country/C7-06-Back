@@ -1,10 +1,13 @@
-package com.C706Back.entity;
+package com.C706Back.models.entity;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "comment")
+@Getter @Setter
 public class Comment {
 
     @Id
@@ -13,9 +16,10 @@ public class Comment {
 
     private String message;
 
-    @Column(name = "created_date")
     private Date createdDate;
 
-    @Column(name = "updated_date")
     private Date updatedDate;
+
+    public Comment() {}
+
 }
