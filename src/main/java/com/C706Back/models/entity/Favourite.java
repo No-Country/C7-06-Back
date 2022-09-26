@@ -7,23 +7,22 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-public class Picture {
+public class Favourite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String path;
+    private boolean favourite;
 
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public Picture() {}
+    public Favourite() {
+    }
 }

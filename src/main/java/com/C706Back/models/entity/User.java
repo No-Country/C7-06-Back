@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -24,6 +26,14 @@ public class User {
 
     private String phoneNumber;
 
+    @OneToOne(mappedBy = "user")
+    private Picture picture;
+
+    @OneToMany(mappedBy = "user")
+    private List<Favourite> favourites;
+
+    @OneToMany(mappedBy = "user")
+    private List<Pet> pets;
     public User() {}
 
 }

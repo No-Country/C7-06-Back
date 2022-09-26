@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -20,10 +24,6 @@ public class Pet {
 
     private int age;
 
-    @ManyToOne
-    @JoinColumn(name = "id_location", unique = true)
-    private Location location;
-
     @Enumerated(value = EnumType.STRING)
     private AnimalType animalType;
 
@@ -36,6 +36,23 @@ public class Pet {
     private Gender gender;
 
     private boolean vaccinationsUpToDate;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "pet")
+    private List<Picture> pictures;
+
+    @OneToMany(mappedBy = "pet")
+    private List<Favourite> favourites;
+
+    @OneToMany(mappedBy = "pet")
+    private List<Comment> comments = new ArrayList<>();
 
     public Pet() {}
 }
