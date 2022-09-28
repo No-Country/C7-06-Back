@@ -13,9 +13,11 @@ public class Picture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String path;
+    @Lob
+    private byte[] content;
 
-    private String name;
+    @Column(name = "content_type")
+    private String contentType;
 
     @ManyToOne
     @JoinColumn(name = "pet_id")
