@@ -4,12 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Comment {
 
     @Id
@@ -30,6 +29,6 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Comment() {}
-
+    public Comment() {
+    }
 }

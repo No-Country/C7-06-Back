@@ -7,13 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Pet {
 
     @Id
@@ -35,6 +33,8 @@ public class Pet {
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
+    private String description;
+
     private boolean vaccinationsUpToDate;
 
     @ManyToOne
@@ -51,8 +51,9 @@ public class Pet {
     @OneToMany(mappedBy = "pet")
     private List<Favourite> favourites;
 
-    @OneToMany(mappedBy = "pet")
-    private List<Comment> comments = new ArrayList<>();
+    /*@OneToMany(mappedBy = "pet")
+    private List<Comment> comments = new ArrayList<>();*/
 
-    public Pet() {}
+    public Pet() {
+    }
 }
