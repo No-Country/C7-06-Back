@@ -1,35 +1,28 @@
 package com.C706Back.models.builder;
 
 import com.C706Back.models.dto.response.CommentResponse;
-import com.C706Back.models.entity.Pet;
-import com.C706Back.models.entity.User;
+import com.C706Back.models.entity.Picture;
 
 import java.util.Date;
 
 public class CommentResponseBuilder implements IBuilder<CommentResponse> {
-
-    private Long id;
-    private String message;
-    private Date createdDate;
+    private Long commentId;
+    private Long userId;
     private Date updatedDate;
-    private Pet pet;
-    private User user;
+    private String message;
+    private String username;
+    private Picture avatar;
 
     public CommentResponseBuilder() {
     }
 
-    public CommentResponseBuilder id(Long id) {
-        this.id = id;
+    public CommentResponseBuilder commentId(Long commentId) {
+        this.commentId = commentId;
         return this;
     }
 
-    public CommentResponseBuilder message(String message) {
-        this.message = message;
-        return this;
-    }
-
-    public CommentResponseBuilder createdDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public CommentResponseBuilder userId(Long userId) {
+        this.userId = userId;
         return this;
     }
 
@@ -38,25 +31,30 @@ public class CommentResponseBuilder implements IBuilder<CommentResponse> {
         return this;
     }
 
-    public CommentResponseBuilder pet(Pet pet) {
-        this.pet = pet;
+    public CommentResponseBuilder message(String message) {
+        this.message = message;
         return this;
     }
 
-    public CommentResponseBuilder user(User user) {
-        this.user = user;
+    public CommentResponseBuilder username(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public CommentResponseBuilder avatar(Picture avatar) {
+        this.avatar = avatar;
         return this;
     }
 
     @Override
     public CommentResponse build() {
         CommentResponse commentResponse = new CommentResponse();
-        commentResponse.setId(id);
-        commentResponse.setMessage(message);
-        commentResponse.setCreatedDate(createdDate);
+        commentResponse.setCommentId(commentId);
+        commentResponse.setUserId(userId);
         commentResponse.setUpdatedDate(updatedDate);
-        commentResponse.setPet(pet);
-        commentResponse.setUser(user);
+        commentResponse.setMessage(message);
+        commentResponse.setUsername(username);
+        commentResponse.setAvatar(avatar);
         return commentResponse;
     }
 }

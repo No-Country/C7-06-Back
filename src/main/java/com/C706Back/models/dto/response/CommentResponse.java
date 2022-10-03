@@ -1,44 +1,34 @@
 package com.C706Back.models.dto.response;
 
-import com.C706Back.models.entity.Pet;
-import com.C706Back.models.entity.User;
+import com.C706Back.models.entity.Picture;
 
 import java.util.Date;
 
 public class CommentResponse {
-    private Long id;
-    private String message;
-    private Date createdDate;
+    private Long commentId;
+    private Long userId;
     private Date updatedDate;
-
-    private Pet pet;
-    private User user;
+    private String message;
+    private String username;
+    private Picture avatar;
 
     public CommentResponse() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getCommentId() {
+        return commentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCommentId(Long commentId) {
+        this.commentId = commentId;
     }
 
-    public String getMessage() {
-        return message;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Date getUpdatedDate() {
@@ -49,19 +39,27 @@ public class CommentResponse {
         this.updatedDate = updatedDate;
     }
 
-    public Pet getPet() {
-        return pet;
+    public String getMessage() {
+        return message;
     }
 
-    public void setPet(Pet pet) {
-        this.pet = pet;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Picture getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Picture avatar) {
+        this.avatar = avatar;
     }
 }

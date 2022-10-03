@@ -2,9 +2,11 @@ package com.C706Back;
 
 import com.C706Back.models.builder.CommentBuilder;
 import com.C706Back.models.entity.Comment;
-import com.C706Back.models.entity.Pet;
 import com.C706Back.repository.CommentRepository;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CommentTest {
 
     @Autowired
@@ -25,6 +28,7 @@ public class CommentTest {
 
     @Test
     //@Rollback(false)
+    @Order(1)
     public void testSaveComment() {
         CommentBuilder commentBuilder = new CommentBuilder();
         Comment comment = commentBuilder.id(1L)
@@ -40,23 +44,26 @@ public class CommentTest {
     }
 
     @Test
+    @Order(2)
     public void testFindById() {
-        Long id = 5L;
+        Long id = 1L;
         Comment comment = commentRepository.findById(id).orElse(null);
         assertThat(comment.getId()).isEqualTo(id);
     }
 
     @Test
+    @Order(3)
     public void testFindCommentByIdNonExist() {
-        Long id = 1L;
+        Long id = 5L;
         Comment comment = commentRepository.findById(id).orElse(null);
         assertNull(comment);
     }
 
     @Test
+    @Order(4)
     public void testSave() {
         CommentBuilder commentBuilder = new CommentBuilder();
-        Comment comment = commentBuilder.id(5L)
+        Comment comment = commentBuilder.id(1L)
                 .message("Mensaje Actualizado")
                 .createdDate(new Date())
                 .updatedDate(new Date())
@@ -65,7 +72,7 @@ public class CommentTest {
                 .build();
 
         Comment commentUpdated = commentRepository.save(comment);
-        Comment commentDB = commentRepository.findById(5L).orElse(null);
+        Comment commentDB = commentRepository.findById(1L).orElse(null);
         assertThat(commentUpdated.getMessage()).isEqualTo(commentDB.getMessage());
     }
 
@@ -77,7 +84,7 @@ public class CommentTest {
 
     @Test
     public void testDeleteById() {
-        Long id = 5L;
+        Long id = 1L;
         boolean isExistentBeforeDelete = commentRepository.findById(id).isPresent();
         commentRepository.deleteById(id);
         boolean isExistentAfterDelete = commentRepository.findById(id).isPresent();

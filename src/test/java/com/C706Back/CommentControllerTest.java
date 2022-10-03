@@ -60,14 +60,16 @@ public class CommentControllerTest {
         mockMvc.perform(get("/pets/{petId}/comments", 1L).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content[0].message").value("Mensaje"))
-                .andExpect(jsonPath("$.content[0].createdDate").value("2022-09-30T03:00:00.000+00:00"))
+                .andExpect(jsonPath("$.content[0].commentId").value("1"))
+                .andExpect(jsonPath("$.content[0].userId").value("1"))
                 .andExpect(jsonPath("$.content[0].updatedDate").value("2022-09-30T03:00:00.000+00:00"))
-                .andExpect(jsonPath("$.content[0].pet.id").value("1"))
-                .andExpect(jsonPath("$.content[1].message").value("Mensaje2"))
-                .andExpect(jsonPath("$.content[1].createdDate").value("2022-09-30T03:00:00.000+00:00"))
+                .andExpect(jsonPath("$.content[0].message").value("Mensaje1"))
+                .andExpect(jsonPath("$.content[0].username").value("user1"))
+                .andExpect(jsonPath("$.content[1].commentId").value("2"))
+                .andExpect(jsonPath("$.content[1].userId").value("1"))
                 .andExpect(jsonPath("$.content[1].updatedDate").value("2022-09-30T03:00:00.000+00:00"))
-                .andExpect(jsonPath("$.content[1].pet.id").value("1"))
+                .andExpect(jsonPath("$.content[1].message").value("Mensaje2"))
+                .andExpect(jsonPath("$.content[1].username").value("user1"))
                 .andExpect(jsonPath("$.content", hasSize(2)))
                 .andExpect(jsonPath("$.pageNumber").value(0))
                 .andExpect(jsonPath("$.pageSize").value(10))
@@ -84,10 +86,11 @@ public class CommentControllerTest {
         mockMvc.perform(get("/pets/{petId}/comments/{commentId}", 1L, 1L).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Mensaje"))
-                .andExpect(jsonPath("$.createdDate").value("2022-09-30T03:00:00.000+00:00"))
+                .andExpect(jsonPath("$.commentId").value("1"))
+                .andExpect(jsonPath("$.userId").value("1"))
                 .andExpect(jsonPath("$.updatedDate").value("2022-09-30T03:00:00.000+00:00"))
-                .andExpect(jsonPath("$.pet.id").value("1"));
+                .andExpect(jsonPath("$.message").value("Mensaje1"))
+                .andExpect(jsonPath("$.username").value("user1"));
         verify(commentService).getCommentById(1L, 1L);
     }
 
@@ -97,12 +100,9 @@ public class CommentControllerTest {
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
         Pet pet = new Pet();
         pet.setId(1L);
-        CommentResponse commentResponse = commentResponseBuilder.id(1L)
+        CommentResponse commentResponse = commentResponseBuilder
+                .userId(1L)
                 .message("Mensaje")
-                .createdDate(date)
-                .updatedDate(date)
-                .pet(pet)
-                .user(null)
                 .build();
 
         mockMvc.perform(post("/pets/{petId}/comments", 1L)
@@ -118,12 +118,9 @@ public class CommentControllerTest {
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
         Pet pet = new Pet();
         pet.setId(1L);
-        CommentResponse commentResponse = commentResponseBuilder.id(1L)
+        CommentResponse commentResponse = commentResponseBuilder
+                .userId(1L)
                 .message("Mensaje")
-                .createdDate(date)
-                .updatedDate(date)
-                .pet(pet)
-                .user(null)
                 .build();
 
         mockMvc.perform(put("/pets/{petId}/comments/{commentId}", 1L, 1L)

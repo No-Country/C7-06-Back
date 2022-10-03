@@ -1,12 +1,15 @@
 package com.C706Back;
 
 import com.C706Back.models.builder.CommentBuilder;
-import com.C706Back.models.builder.CommentResponseBuilder;
+import com.C706Back.models.builder.CommentRequestBuilder;
+import com.C706Back.models.dto.request.CommentRequest;
 import com.C706Back.models.dto.response.CommentResponse;
 import com.C706Back.models.entity.Comment;
 import com.C706Back.models.entity.Pet;
+import com.C706Back.models.entity.User;
 import com.C706Back.repository.CommentRepository;
 import com.C706Back.repository.PetRepository;
+import com.C706Back.repository.UserRepository;
 import com.C706Back.service.CommentService;
 import com.C706Back.service.impl.CommentServiceImpl;
 import org.assertj.core.api.Assertions;
@@ -17,7 +20,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.*;
 
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
@@ -30,24 +32,30 @@ public class CommentServiceTest {
     private CommentRepository commentRepository;
     @Mock
     private PetRepository petRepository;
+    @Mock
+    private UserRepository userRepository;
     private CommentService commentService;
 
     Pet pet;
+
+    User user;
     Comment comment;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        commentService = new CommentServiceImpl(commentRepository, petRepository);
+        commentService = new CommentServiceImpl(commentRepository, petRepository, userRepository);
         CommentBuilder commentBuilder = new CommentBuilder();
         pet = new Pet();
         pet.setId(1L);
+        user = new User();
+        user.setId(1L);
         comment = commentBuilder.id(1L)
                 .message("Mensaje")
                 .createdDate(new Date())
                 .updatedDate(new Date())
                 .pet(pet)
-                .user(null)
+                .user(user)
                 .build();
     }
 
@@ -72,20 +80,17 @@ public class CommentServiceTest {
 
     @Test
     void testCreateComment() {
-        CommentResponseBuilder commentResponseBuilder = new CommentResponseBuilder();
-        Pet pet = new Pet();
-        pet.setId(1L);
-        CommentResponse commentResponse = commentResponseBuilder
+        CommentRequestBuilder commentRequestBuilder = new CommentRequestBuilder();
+        CommentRequest commentRequest = commentRequestBuilder
+                .userId(1L)
                 .message("Mensaje")
-                .createdDate(new Date())
-                .updatedDate(new Date())
-                .pet(pet)
-                .user(null)
                 .build();
+        Mockito.when(userRepository.findById(1L))
+                .thenReturn(Optional.of(user));
         Mockito.when(petRepository.findById(1L))
                 .thenReturn(Optional.of(pet));
         Mockito.when(commentRepository.save(Mockito.any(Comment.class))).thenReturn(comment);
-        assertNotNull(commentService.createComment(1L, commentResponse));
+        assertNotNull(commentService.createComment(1L, commentRequest));
     }
 
 

@@ -1,5 +1,6 @@
 package com.C706Back.controllers;
 
+import com.C706Back.models.dto.request.CommentRequest;
 import com.C706Back.models.dto.response.CommentResponse;
 import com.C706Back.models.dto.response.CommentListResponse;
 import com.C706Back.service.CommentService;
@@ -28,13 +29,13 @@ public class CommentController {
     }
 
     @RequestMapping(path = "/pets/{petId}/comments/{commentId}", method = RequestMethod.PUT)
-    private ResponseEntity<CommentResponse> updateComment(@PathVariable(value = "petId") Long petId, @PathVariable(value = "commentId") Long commentId, @RequestBody CommentResponse commentResponse) {
-        return ResponseEntity.ok(commentService.updateComment(petId, commentId, commentResponse));
+    private ResponseEntity<CommentResponse> updateComment(@PathVariable(value = "petId") Long petId, @PathVariable(value = "commentId") Long commentId, @RequestBody CommentRequest commentRequest) {
+        return ResponseEntity.ok(commentService.updateComment(petId, commentId, commentRequest));
     }
 
     @RequestMapping(path = "/pets/{petId}/comments", method = RequestMethod.POST)
-    private ResponseEntity<CommentResponse> createComment(@PathVariable(value = "petId") Long petId, @RequestBody CommentResponse commentResponse) {
-        return new ResponseEntity<>(commentService.createComment(petId, commentResponse), HttpStatus.CREATED);
+    private ResponseEntity<CommentResponse> createComment(@PathVariable(value = "petId") Long petId, @RequestBody CommentRequest commentRequest) {
+        return new ResponseEntity<>(commentService.createComment(petId, commentRequest), HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "/pets/{petId}/comments/{commentId}", method = RequestMethod.DELETE)

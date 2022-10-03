@@ -19,12 +19,12 @@ public class DataComment {
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
 
         CommentResponseBuilder commentResponseBuilder = new CommentResponseBuilder();
-        return Optional.of(commentResponseBuilder.id(1L)
-                .message("Mensaje")
-                .createdDate(date)
+        return Optional.of(commentResponseBuilder
+                .commentId(1L)
+                .userId(1L)
                 .updatedDate(date)
-                .pet(pet)
-                .user(null)
+                .message("Mensaje1")
+                .username("user1")
                 .build());
     }
 
@@ -35,12 +35,12 @@ public class DataComment {
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
 
         CommentResponseBuilder commentResponseBuilder = new CommentResponseBuilder();
-        return Optional.of(commentResponseBuilder.id(2L)
-                .message("Mensaje2")
-                .createdDate(date)
+        return Optional.of(commentResponseBuilder
+                .commentId(2L)
+                .userId(1L)
                 .updatedDate(date)
-                .pet(pet)
-                .user(null)
+                .message("Mensaje2")
+                .username("user1")
                 .build());
     }
 }
