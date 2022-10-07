@@ -28,7 +28,8 @@ public class User {
 
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne
+    @JoinColumn(name = "picture_id")
     private Picture picture;
 
     @OneToMany(mappedBy = "user")

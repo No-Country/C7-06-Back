@@ -17,13 +17,5 @@ public class Picture {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "pet_id")
-    private Pet pet;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     public Picture() {}
 }

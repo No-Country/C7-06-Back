@@ -8,12 +8,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class CommentListResponse {
-
-    private boolean isLastPage;
     private int pageNumber;
     private int pageSize;
     private long totalElements;
     private int totalPages;
+    private boolean isLastPage;
     private List<CommentResponse> content;
 
     public CommentListResponse() {

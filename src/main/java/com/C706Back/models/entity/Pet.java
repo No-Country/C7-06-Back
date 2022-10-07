@@ -45,15 +45,12 @@ public class Pet {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "pet")
+    @OneToMany
+    @JoinColumn(name = "picture_id")
     private List<Picture> pictures;
 
     @OneToMany(mappedBy = "pet")
     private List<Favourite> favourites;
-
-    /*@OneToMany(mappedBy = "pet")
-    private List<Comment> comments = new ArrayList<>();*/
-
     public Pet() {
     }
 }
