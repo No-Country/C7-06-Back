@@ -1,7 +1,6 @@
 package com.C706Back;
 
 
-import com.C706Back.models.builder.CommentResponseBuilder;
 import com.C706Back.models.dto.response.CommentResponse;
 import com.C706Back.models.entity.Pet;
 
@@ -18,13 +17,12 @@ public class DataComment {
 
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
 
-        CommentResponseBuilder commentResponseBuilder = new CommentResponseBuilder();
-        return Optional.of(commentResponseBuilder
+        return Optional.of(CommentResponse.builder()
                 .commentId(1L)
                 .userId(1L)
                 .updatedDate(date)
                 .message("Mensaje1")
-                .username("user1")
+                .fullName("user1")
                 .build());
     }
 
@@ -34,13 +32,12 @@ public class DataComment {
 
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
 
-        CommentResponseBuilder commentResponseBuilder = new CommentResponseBuilder();
-        return Optional.of(commentResponseBuilder
+        return Optional.of(CommentResponse.builder()
                 .commentId(2L)
                 .userId(1L)
                 .updatedDate(date)
                 .message("Mensaje2")
-                .username("user1")
+                .fullName("user1")
                 .build());
     }
 }

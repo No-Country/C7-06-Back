@@ -1,6 +1,5 @@
 package com.C706Back;
 
-import com.C706Back.models.builder.CommentBuilder;
 import com.C706Back.models.entity.Comment;
 import com.C706Back.repository.CommentRepository;
 import org.junit.jupiter.api.MethodOrderer;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.Date;
 import java.util.List;
@@ -30,8 +28,8 @@ public class CommentTest {
     //@Rollback(false)
     @Order(1)
     public void testSaveComment() {
-        CommentBuilder commentBuilder = new CommentBuilder();
-        Comment comment = commentBuilder.id(1L)
+        Comment comment = Comment.builder()
+                .id(1L)
                 .message("Mensaje")
                 .createdDate(new Date())
                 .updatedDate(new Date())
@@ -62,8 +60,8 @@ public class CommentTest {
     @Test
     @Order(4)
     public void testSave() {
-        CommentBuilder commentBuilder = new CommentBuilder();
-        Comment comment = commentBuilder.id(1L)
+        Comment comment = Comment.builder()
+                .id(1L)
                 .message("Mensaje Actualizado")
                 .createdDate(new Date())
                 .updatedDate(new Date())

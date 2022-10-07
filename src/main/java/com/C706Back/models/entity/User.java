@@ -24,6 +24,8 @@ public class User {
 
     private String address;
 
+    private String description;
+
     private String phoneNumber;
 
     @OneToOne(mappedBy = "user")

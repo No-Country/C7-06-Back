@@ -1,15 +1,19 @@
 package com.C706Back.models.dto.response;
 
 import com.C706Back.models.entity.Picture;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.util.Date;
 
+@Builder
+@AllArgsConstructor
 public class CommentResponse {
     private Long commentId;
     private Long userId;
     private Date updatedDate;
     private String message;
-    private String username;
+    private String fullName;
     private Picture avatar;
 
     public CommentResponse() {
@@ -47,12 +51,12 @@ public class CommentResponse {
         this.message = message;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Picture getAvatar() {

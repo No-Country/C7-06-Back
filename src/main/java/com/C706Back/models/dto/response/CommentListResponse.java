@@ -1,25 +1,22 @@
 package com.C706Back.models.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 public class CommentListResponse {
 
-    private List<CommentResponse> content;
+    private boolean isLastPage;
     private int pageNumber;
     private int pageSize;
     private long totalElements;
     private int totalPages;
-    private boolean isLastPage;
+    private List<CommentResponse> content;
 
     public CommentListResponse() {
-    }
-
-    public List<CommentResponse> getContent() {
-        return content;
-    }
-
-    public void setContent(List<CommentResponse> content) {
-        this.content = content;
     }
 
     public int getPageNumber() {
@@ -60,5 +57,13 @@ public class CommentListResponse {
 
     public void setLastPage(boolean lastPage) {
         isLastPage = lastPage;
+    }
+
+    public List<CommentResponse> getContent() {
+        return content;
+    }
+
+    public void setContent(List<CommentResponse> content) {
+        this.content = content;
     }
 }

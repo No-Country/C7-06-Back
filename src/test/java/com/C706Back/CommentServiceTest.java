@@ -1,7 +1,5 @@
 package com.C706Back;
 
-import com.C706Back.models.builder.CommentBuilder;
-import com.C706Back.models.builder.CommentRequestBuilder;
 import com.C706Back.models.dto.request.CommentRequest;
 import com.C706Back.models.dto.response.CommentResponse;
 import com.C706Back.models.entity.Comment;
@@ -45,12 +43,11 @@ public class CommentServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         commentService = new CommentServiceImpl(commentRepository, petRepository, userRepository);
-        CommentBuilder commentBuilder = new CommentBuilder();
         pet = new Pet();
         pet.setId(1L);
         user = new User();
         user.setId(1L);
-        comment = commentBuilder.id(1L)
+        comment.builder().id(1L)
                 .message("Mensaje")
                 .createdDate(new Date())
                 .updatedDate(new Date())
@@ -80,8 +77,7 @@ public class CommentServiceTest {
 
     @Test
     void testCreateComment() {
-        CommentRequestBuilder commentRequestBuilder = new CommentRequestBuilder();
-        CommentRequest commentRequest = commentRequestBuilder
+        CommentRequest commentRequest = CommentRequest.builder()
                 .userId(1L)
                 .message("Mensaje")
                 .build();

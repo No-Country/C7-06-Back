@@ -1,8 +1,6 @@
 package com.C706Back;
 
 import com.C706Back.controllers.CommentController;
-import com.C706Back.models.builder.CommentListResponseBuilder;
-import com.C706Back.models.builder.CommentResponseBuilder;
 import com.C706Back.models.dto.response.CommentListResponse;
 import com.C706Back.models.dto.response.CommentResponse;
 import com.C706Back.models.entity.Pet;
@@ -47,8 +45,7 @@ public class CommentControllerTest {
     @Test
     void verifyCommentListResponse() throws Exception {
         List<CommentResponse> commentResponses = Arrays.asList(DataComment.createComment001().orElseThrow(), DataComment.createComment002().orElseThrow());
-        CommentListResponseBuilder commentListResponseBuilder = new CommentListResponseBuilder();
-        CommentListResponse commentListResponse = commentListResponseBuilder
+        CommentListResponse commentListResponse = CommentListResponse.builder()
                 .content(commentResponses)
                 .pageNumber(0)
                 .pageSize(10)
@@ -96,11 +93,10 @@ public class CommentControllerTest {
 
     @Test
     void verifyCreateComment() throws Exception {
-        CommentResponseBuilder commentResponseBuilder = new CommentResponseBuilder();
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
         Pet pet = new Pet();
         pet.setId(1L);
-        CommentResponse commentResponse = commentResponseBuilder
+        CommentResponse commentResponse = CommentResponse.builder()
                 .userId(1L)
                 .message("Mensaje")
                 .build();
@@ -114,11 +110,10 @@ public class CommentControllerTest {
 
     @Test
     void verifyUpdateComment() throws Exception {
-        CommentResponseBuilder commentResponseBuilder = new CommentResponseBuilder();
         Date date = new GregorianCalendar(2022, Calendar.SEPTEMBER, 30).getTime();
         Pet pet = new Pet();
         pet.setId(1L);
-        CommentResponse commentResponse = commentResponseBuilder
+        CommentResponse commentResponse = CommentResponse.builder()
                 .userId(1L)
                 .message("Mensaje")
                 .build();
