@@ -20,7 +20,7 @@ public class CommentMapper {
                 .userId(comment.getUser().getId())
                 .updatedDate(comment.getUpdatedDate())
                 .message(comment.getMessage())
-                .fullName(comment.getUser().getName())
+                .fullName(comment.getUser().getName() + " " + comment.getUser().getSurname())
                 .avatar(comment.getUser().getPicture())
                 .build();
     }

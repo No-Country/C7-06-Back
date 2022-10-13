@@ -1,5 +1,8 @@
 package com.C706Back.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +10,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@AllArgsConstructor
+@Builder
+@Table(name = "pictures")
 public class Picture {
 
     @Id
@@ -15,7 +21,12 @@ public class Picture {
 
     private String path;
 
-    private String name;
+    private String keyNumber;
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    private Pet pet;
 
     public Picture() {}
 }

@@ -8,11 +8,11 @@ public interface CommentService {
 
     CommentListResponse listCommentsByPet(Long petId, int pageNumber, int pageSize, String orderBy, String sortDir);
 
-    CommentResponse createComment(Long petId, CommentRequest commentRequest);
+    CommentResponse createComment(Long petId, Long userId, CommentRequest commentRequest);
 
-    CommentResponse getCommentById(Long petId, Long commentId);
+    CommentResponse getCommentById(Long commentId);
 
-    CommentResponse updateComment(Long petId, Long commentId, CommentRequest commentRequest);
+    CommentResponse updateComment(Long commentId, Long userId, CommentRequest commentRequest);
 
-    void deleteComment(Long petId, Long commentId);
+    void deleteComment(Long commentId);
 }

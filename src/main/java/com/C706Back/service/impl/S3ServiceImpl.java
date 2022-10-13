@@ -20,12 +20,12 @@ public class S3ServiceImpl implements S3Service {
     private AmazonS3Client s3Client;
 
     @Override
-    public String getObjectUrl(String key) {
+    public String getObjectUrl(final String key) {
         return String.format("https://%s.s3.amazonaws.com/%s", BUCKET, key);
     }
 
     @Override
-    public String putObject(MultipartFile multipartFile) {
+    public String putObject(final MultipartFile multipartFile) {
         String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
         String key = String.format("%s.%s", UUID.randomUUID(), extension);
 
@@ -47,5 +47,4 @@ public class S3ServiceImpl implements S3Service {
     public void deleteObject(String key) {
         s3Client.deleteObject(BUCKET, key);
     }
-
 }

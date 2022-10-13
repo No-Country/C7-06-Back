@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> page = commentRepository.findByPetId(petId, pageable);
         List<Comment> comments = page.getContent();
         List<CommentResponse> content = comments.stream()
-                .map(CommentMapper::mapToDto).collect(Collectors.toList());
+                .map(comment -> CommentMapper.mapToDto(comment)).collect(Collectors.toList());
 
         return CommentListResponse.builder()
                 .pageNumber(page.getNumber())
@@ -56,11 +56,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponse createComment(Long petId, CommentRequest commentRequest) {
+    public CommentResponse createComment(Long petId, Long userId, CommentRequest commentRequest) {
         Pet pet = petRepository
                 .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
         User user = userRepository
-                .findById(commentRequest.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", commentRequest.getUserId()));
+                .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         Comment comment = CommentMapper.mapToEntity(commentRequest, user);
         comment.setCreatedDate(new Date());
         comment.setUpdatedDate(new Date());
@@ -70,25 +70,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponse getCommentById(Long petId, Long commentId) {
-        Pet pet = petRepository
-                .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
+    public CommentResponse getCommentById(Long commentId) {
         Comment comment = commentRepository
                 .findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
-        if (!comment.getPet().getId().equals(pet.getId()))
-            throw new BadRequestException("The comment doesn't belong to the pet profile");
         return CommentMapper.mapToDto(comment);
     }
 
     @Override
-    public CommentResponse updateComment(Long petId, Long commentId, CommentRequest commentRequest) {
-        Pet pet = petRepository
-                .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
+    public CommentResponse updateComment(Long commentId, Long userId, CommentRequest commentRequest) {
         Comment comment = commentRepository
                 .findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
-        if (!comment.getPet().getId().equals(pet.getId()))
-            throw new BadRequestException("The comment doesn't belong to the pet profile");
-        if (!comment.getUser().getId().equals(commentRequest.getUserId()))
+        if (!comment.getUser().getId().equals(userId))
             throw new BadRequestException("The comment doesn't match the user");
         comment.setMessage(commentRequest.getMessage());
         comment.setUpdatedDate(new Date());
@@ -97,13 +89,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(Long petId, Long commentId) {
-        Pet pet = petRepository
-                .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
+    public void deleteComment(Long commentId) {
         Comment comment = commentRepository
                 .findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
-        if (!comment.getPet().getId().equals(pet.getId()))
-            throw new BadRequestException("The comment doesn't belong to the pet profile");
         commentRepository.delete(comment);
     }
 }

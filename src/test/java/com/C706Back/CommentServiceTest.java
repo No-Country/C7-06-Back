@@ -71,14 +71,13 @@ public class CommentServiceTest {
                 .thenReturn(Optional.of(pet));
         Mockito.when(commentRepository.findById(1L))
                 .thenReturn(Optional.of(comment));
-        CommentResponse found = commentService.getCommentById(1L, 1L);
+        CommentResponse found = commentService.getCommentById(1L);
         Assertions.assertThat(found.getMessage()).isEqualTo("Mensaje");
     }
 
     @Test
     void testCreateComment() {
         CommentRequest commentRequest = CommentRequest.builder()
-                .userId(1L)
                 .message("Mensaje")
                 .build();
         Mockito.when(userRepository.findById(1L))
@@ -86,7 +85,7 @@ public class CommentServiceTest {
         Mockito.when(petRepository.findById(1L))
                 .thenReturn(Optional.of(pet));
         Mockito.when(commentRepository.save(Mockito.any(Comment.class))).thenReturn(comment);
-        assertNotNull(commentService.createComment(1L, commentRequest));
+        assertNotNull(commentService.createComment(1L, 1L, commentRequest));
     }
 
 

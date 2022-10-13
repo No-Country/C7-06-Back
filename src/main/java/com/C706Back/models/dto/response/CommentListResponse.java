@@ -13,6 +13,7 @@ public class CommentListResponse {
     private long totalElements;
     private int totalPages;
     private boolean isLastPage;
+
     private List<CommentResponse> content;
 
     public CommentListResponse() {

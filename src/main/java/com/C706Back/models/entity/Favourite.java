@@ -6,7 +6,9 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
+@Table(name = "favourites")
 public class Favourite {
 
     @Id

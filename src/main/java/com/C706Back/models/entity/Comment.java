@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -13,12 +15,16 @@ import java.util.Date;
 @Setter
 @Builder
 @AllArgsConstructor
+@Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "The message cannot be empty")
+    @Size(max = 500, message = "The message could not exceed 500 characters")
+    @Column(columnDefinition="varchar(500)")
     private String message;
 
     private Date createdDate;

@@ -77,10 +77,10 @@ public class CommentControllerTest {
 
     @Test
     void verifyGetCommentById() throws Exception {
-        when(commentService.getCommentById(1L, 1L))
+        when(commentService.getCommentById(1L))
                 .thenReturn(DataComment.createComment001().orElseThrow());
 
-        mockMvc.perform(get("/pets/{petId}/comments/{commentId}", 1L, 1L).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/pets/comments/{commentId}",  1L).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.commentId").value("1"))
@@ -88,7 +88,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.updatedDate").value("2022-09-30T03:00:00.000+00:00"))
                 .andExpect(jsonPath("$.message").value("Mensaje1"))
                 .andExpect(jsonPath("$.username").value("user1"));
-        verify(commentService).getCommentById(1L, 1L);
+        verify(commentService).getCommentById(1L);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class CommentControllerTest {
                 .message("Mensaje")
                 .build();
 
-        mockMvc.perform(put("/pets/{petId}/comments/{commentId}", 1L, 1L)
+        mockMvc.perform(put("/pets/comments/{commentId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(commentResponse)))
                 .andExpect(status().is(200))
@@ -127,7 +127,7 @@ public class CommentControllerTest {
 
     @Test
     void verifyDeleteComment() throws Exception {
-        mockMvc.perform(delete("/pets/{petId}/comments/{commentId}", 1L, 1L))
+        mockMvc.perform(delete("/pets/comments/{commentId}", 1L))
                 .andExpect(status().is(200))
                 .andExpect(content().string("Comment was deleted"));
     }
