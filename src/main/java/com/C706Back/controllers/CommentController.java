@@ -29,7 +29,7 @@ public class CommentController {
     }
 
     @RequestMapping(path = "/pets/comments/{commentId}", method = RequestMethod.GET)
-    private ResponseEntity<?> getCommentById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "commentId") Long commentId) throws Exception {
+    private ResponseEntity<?> getCommentById(@PathVariable(value = "commentId") Long commentId) throws Exception {
 
         return ResponseEntity.ok(commentService.getCommentById(commentId));
 

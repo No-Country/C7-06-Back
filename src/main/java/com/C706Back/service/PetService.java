@@ -15,6 +15,6 @@ public interface PetService {
 
     PetCardListResponse listPetsByUser(Long userId, int pageNumber, int pageSize, String orderBy, String sortDir);
 
-    /*PetCardListResponse listPetsByLastUpdate(ContentType contentType, int pageNumber, int pageSize, String orderBy, String sortDir);*/
+    PetCardListResponse listPetsByAnimalType(String animalType, int pageNumber, int pageSize, String orderBy, String sortDir);
 
 }

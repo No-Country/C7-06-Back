@@ -2,6 +2,7 @@ package com.C706Back.controllers;
 
 import com.C706Back.exception.ErrorMessage;
 import com.C706Back.models.dto.request.PetProfileRequest;
+import com.C706Back.models.dto.response.PetCardListResponse;
 import com.C706Back.models.dto.response.PetProfileResponse;
 import com.C706Back.models.enums.Role;
 import com.C706Back.service.PetService;
@@ -26,6 +27,32 @@ public class PetController {
     private final PictureService pictureService;
 
     private final JwtUtils jwtUtils;
+
+    @RequestMapping(path = "users/{userId}/pets", method = RequestMethod.GET)
+    private PetCardListResponse listPetsByUser(@PathVariable(value = "userId") Long userId,
+                                               @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+                                               @RequestParam(value = "pageSize", defaultValue = "3", required = false) int pageSize,
+                                               @RequestParam(value = "sortBy", defaultValue = "updatedDate", required = false) String orderBy,
+                                               @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir) {
+
+        return petService.listPetsByUser(userId, pageNumber, pageSize, orderBy, sortDir);
+    }
+
+    @RequestMapping(path = "/petsByAnimalType", method = RequestMethod.GET)
+    private PetCardListResponse listPetsByAnimalType(
+            @RequestParam(value = "animal") String animalType,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "4", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "updatedDate", required = false) String orderBy,
+            @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir) {
+
+        return petService.listPetsByAnimalType(animalType, pageNumber, pageSize, orderBy, sortDir);
+    }
+
+    @RequestMapping(path = "/pets", method = RequestMethod.GET)
+    private ResponseEntity<PetProfileResponse> getPet(@PathVariable(value = "petId") Long petId) {
+        return ResponseEntity.ok(petService.getPetById(petId));
+    }
 
     @RequestMapping(path = "/pets", method = RequestMethod.POST)
     private ResponseEntity<?> createPet(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody PetProfileRequest petProfileRequest, BindingResult result) throws Exception {
@@ -63,11 +90,6 @@ public class PetController {
         }
 
         return new ResponseEntity<>(petService.updatePet(petId, petProfileRequest), HttpStatus.CREATED);
-    }
-
-    @RequestMapping(path = "/pets/{petId}", method = RequestMethod.GET)
-    private ResponseEntity<PetProfileResponse> getPet(@PathVariable(value = "petId") Long petId) {
-        return ResponseEntity.ok(petService.getPetById(petId));
     }
 
     @RequestMapping(path = "/pets/{petId}", method = RequestMethod.DELETE)

@@ -37,6 +37,7 @@ public class PetProfileMapper {
                 .gender(pet.getGender())
                 .weight(pet.getWeight())
                 .size(pet.getSize())
+                .updatedDate(pet.getUpdatedDate())
                 .vaccinationsUpToDate(pet.isVaccinationsUpToDate())
                 .pureRace(pet.isPureRace())
                 .pictures(pet.getPictures())

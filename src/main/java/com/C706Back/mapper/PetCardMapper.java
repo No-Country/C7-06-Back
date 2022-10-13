@@ -11,7 +11,7 @@ public class PetCardMapper {
                 .petId(pet.getId())
                 .name(pet.getName())
                 .race(pet.getRace())
-                .gender(pet.getRace().toString())
+                .gender(pet.getGender().toString())
                 .age(pet.getAge())
                 .build();
     }
