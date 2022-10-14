@@ -2,6 +2,8 @@ package com.C706Back.service;
 
 import com.C706Back.models.dto.request.PetProfileRequest;
 import com.C706Back.models.dto.response.*;
+import com.C706Back.models.enums.AnimalType;
+import com.C706Back.models.enums.Gender;
 import jdk.jfr.ContentType;
 
 public interface PetService {
@@ -17,4 +19,5 @@ public interface PetService {
 
     PetCardListResponse listPetsByAnimalType(String animalType, int pageNumber, int pageSize, String orderBy, String sortDir);
 
+    PetCardListResponse listFilteredPets(AnimalType animalType, Gender gender, Integer startAge, Integer endAge, String race, String location, int pageNumber, int pageSize, String orderBy, String sortDir);
 }

@@ -4,6 +4,8 @@ import com.C706Back.exception.ErrorMessage;
 import com.C706Back.models.dto.request.PetProfileRequest;
 import com.C706Back.models.dto.response.PetCardListResponse;
 import com.C706Back.models.dto.response.PetProfileResponse;
+import com.C706Back.models.enums.AnimalType;
+import com.C706Back.models.enums.Gender;
 import com.C706Back.models.enums.Role;
 import com.C706Back.service.PetService;
 import com.C706Back.service.PictureService;
@@ -47,6 +49,42 @@ public class PetController {
             @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir) {
 
         return petService.listPetsByAnimalType(animalType, pageNumber, pageSize, orderBy, sortDir);
+    }
+
+    @RequestMapping(path = "/filteredPets", method = RequestMethod.GET)
+    private PetCardListResponse listFilteredPets(
+            @RequestParam(value = "animal", required = false) String animalTypeParam,
+            @RequestParam(value = "gender", required = false) String genderParam,
+            @RequestParam(value = "startAge", required = false) Integer startAgeParam,
+            @RequestParam(value = "endAge", required = false) Integer endAgeParam,
+            @RequestParam(value = "race", required = false) String raceParam,
+            @RequestParam(value = "location", required = false) String locationParam,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "4", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "updatedDate", required = false) String orderBy,
+            @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir) {
+
+        AnimalType animal = null;
+        Gender gender = null;
+        if (animalTypeParam != null && animalTypeParam.toLowerCase().equals("cat"))
+            animal = AnimalType.CAT;
+
+        if (animalTypeParam != null && animalTypeParam.toLowerCase().equals("dog"))
+            animal = AnimalType.DOG;
+
+        if (genderParam != null && genderParam.toLowerCase().equals("female"))
+            gender = Gender.FEMALE;
+
+        if (genderParam != null && genderParam.toLowerCase().equals("male"))
+            gender = Gender.MALE;
+
+        if ((startAgeParam == null && endAgeParam != null) || (startAgeParam != null && endAgeParam == null))
+            throw new RuntimeException("Wrong age range.");
+
+
+
+
+        return petService.listFilteredPets(animal, gender, startAgeParam, endAgeParam, raceParam, locationParam, pageNumber, pageSize, orderBy, sortDir);
     }
 
     @RequestMapping(path = "/pets", method = RequestMethod.GET)
