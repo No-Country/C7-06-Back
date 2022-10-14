@@ -82,12 +82,10 @@ public class PetController {
             throw new RuntimeException("Wrong age range.");
 
 
-
-
         return petService.listFilteredPets(animal, gender, startAgeParam, endAgeParam, raceParam, locationParam, pageNumber, pageSize, orderBy, sortDir);
     }
 
-    @RequestMapping(path = "/pets", method = RequestMethod.GET)
+    @RequestMapping(path = "/pets/{petId}", method = RequestMethod.GET)
     private ResponseEntity<PetProfileResponse> getPet(@PathVariable(value = "petId") Long petId) {
         return ResponseEntity.ok(petService.getPetById(petId));
     }

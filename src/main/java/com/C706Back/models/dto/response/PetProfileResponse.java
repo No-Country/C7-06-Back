@@ -42,7 +42,7 @@ public class PetProfileResponse {
 
     private boolean pureRace;
 
-    private List<Picture> pictures;
+    private List<PictureResponse> pictures;
 
     private Date updatedDate;
 

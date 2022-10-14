@@ -11,6 +11,7 @@ import com.C706Back.repository.UserRepository;
 import com.C706Back.service.PictureService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class PictureServiceImpl implements PictureService {
     public PictureResponse createPetPicture(Long petId, String path, String key) {
         Pet pet = petRepository
                 .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
+        pet.setUpdatedDate(new Date());
         Picture picture = Picture.builder()
                 .path(path)
                 .pet(pet)
@@ -44,7 +46,7 @@ public class PictureServiceImpl implements PictureService {
         pet.setPictures(pictures);
         petRepository.save(pet);
 
-        return new PictureResponse(pictureInserted.getPath());
+        return new PictureResponse(pictureInserted.getId(), pictureInserted.getPath());
     }
 
     @Override
@@ -60,7 +62,7 @@ public class PictureServiceImpl implements PictureService {
         user.setPicture(pictureInserted);
         userRepository.save(user);
 
-        return new PictureResponse(pictureInserted.getPath());
+        return new PictureResponse(pictureInserted.getId(), pictureInserted.getPath());
     }
 
     @Override
@@ -70,7 +72,7 @@ public class PictureServiceImpl implements PictureService {
         picture.setPath(path);
         picture.setKeyNumber(key);
         Picture pictureInserted = pictureRepository.save(picture);
-        return new PictureResponse(pictureInserted.getPath());
+        return new PictureResponse(pictureInserted.getId(), pictureInserted.getPath());
     }
 
     @Override
