@@ -4,7 +4,6 @@ import com.C706Back.models.dto.request.PetProfileRequest;
 import com.C706Back.models.dto.response.*;
 import com.C706Back.models.enums.AnimalType;
 import com.C706Back.models.enums.Gender;
-import jdk.jfr.ContentType;
 
 public interface PetService {
 

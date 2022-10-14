@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CommentTest {
-
+/*
     @Autowired
     private CommentRepository commentRepository;
 
@@ -89,4 +89,7 @@ public class CommentTest {
         assertTrue(isExistentBeforeDelete);
         assertFalse(isExistentAfterDelete);
     }
+
+    */
+
 }
