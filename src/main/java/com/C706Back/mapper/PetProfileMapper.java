@@ -8,6 +8,7 @@ import com.C706Back.models.entity.Pet;
 import com.C706Back.models.entity.Picture;
 import com.C706Back.models.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,10 +32,13 @@ public class PetProfileMapper {
     }
 
     public static PetProfileResponse mapToDto(Pet pet) {
-        List<PictureResponse> pictureResponseList = pet.getPictures().stream()
-                .map(picture -> {
-                    return new PictureResponse(picture.getId(), picture.getPath());
-                }).collect(Collectors.toList());
+        List<PictureResponse> pictureResponseList = new ArrayList<>();
+        if (pet.getPictures() != null) {
+            pictureResponseList = pet.getPictures().stream()
+                    .map(picture -> {
+                        return new PictureResponse(picture.getId(), picture.getPath());
+                    }).collect(Collectors.toList());
+        }
         return PetProfileResponse.builder()
                 .id(pet.getId())
                 .name(pet.getName())

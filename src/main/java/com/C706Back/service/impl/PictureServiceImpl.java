@@ -31,6 +31,15 @@ public class PictureServiceImpl implements PictureService {
 
 
     @Override
+    public Picture getPicture(Long pictureId) {
+
+        Picture picture = pictureRepository
+                .findById(pictureId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", pictureId));
+
+        return picture;
+    }
+
+    @Override
     public PictureResponse createPetPicture(Long petId, String path, String key) {
         Pet pet = petRepository
                 .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));

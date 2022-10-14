@@ -19,29 +19,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "The name cannot be empty")
     private String name;
 
-    @NotEmpty(message = "The surname cannot be empty")
     private String surname;
 
-    @NotEmpty(message = "The email cannot be empty")
     @Column(unique = true)
     private String email;
 
-    @NotEmpty(message = "The password cannot be empty")
     private String password;
 
-    @NotEmpty(message = "The address cannot be empty")
     private String address;
 
-    @NotEmpty(message = "The description cannot be empty")
     private String description;
 
-    @NotEmpty(message = "The phone number cannot be empty")
     private String phoneNumber;
 
-    @NotEmpty(message = "The role cannot be empty")
     @Enumerated(EnumType.STRING)
     private Role role;
 

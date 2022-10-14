@@ -3,7 +3,9 @@ package com.C706Back.controllers;
 import com.C706Back.exception.FileSizeExceedException;
 import com.C706Back.exception.OutOfBoundUploadFilesException;
 import com.C706Back.models.dto.response.PetProfileResponse;
+import com.C706Back.models.dto.response.PictureResponse;
 import com.C706Back.models.dto.response.UserProfileResponse;
+import com.C706Back.models.entity.Picture;
 import com.C706Back.models.enums.Role;
 import com.C706Back.service.PetService;
 import com.C706Back.service.PictureService;
@@ -36,7 +38,7 @@ public class PictureController {
 
     private final JwtUtils jwtUtils;
 
-    @RequestMapping(path = "pets/{petId}/pictures/", method = RequestMethod.POST)
+    @RequestMapping(path = "pets/{petId}/pictures", method = RequestMethod.POST)
     private Map<String, String> createPetPicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "petId") Long petId) throws Exception {
         Map<String, String> result = new HashMap<>();
         if (!jwtUtils.verify(token)) {
@@ -68,6 +70,7 @@ public class PictureController {
                 path = s3Service.getObjectUrl(key);
                 result.put("key", key);
                 result.put("path", path);
+                System.out.println("aqui");
 
                 pictureService.createPetPicture(petId, path, key);
 
@@ -119,7 +122,7 @@ public class PictureController {
         return result;
     }
 
-    @RequestMapping(path = "/picture/{pictureId}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/pictures/{pictureId}", method = RequestMethod.PUT)
     private Map<String, String> updatePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
         Map<String, String> result = new HashMap<>();
         if (!jwtUtils.verify(token)) {
@@ -157,8 +160,8 @@ public class PictureController {
         return result;
     }
 
-    @RequestMapping(path = "/picture/{pictureId}", method = RequestMethod.DELETE)
-    private ResponseEntity<String> deletePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
+    @RequestMapping(path = "/pictures/{pictureId}", method = RequestMethod.DELETE)
+    private ResponseEntity<String> deletePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
         Map<String, String> result = new HashMap<>();
         if (!jwtUtils.verify(token)) {
             result.put("error", "Unhautorized");
@@ -171,10 +174,11 @@ public class PictureController {
             result.put("error", "Unhautorized");
         }
 
-        pictureService.deletePicture(pictureId);
 
-        String key = "";
-        s3Service.deleteObject(key);
+        Picture picture = pictureService.getPicture(pictureId);
+        s3Service.deleteObject(picture.getKeyNumber());
+
+        pictureService.deletePicture(pictureId);
 
         return new ResponseEntity<>("Picture was deleted", HttpStatus.OK);
     }
