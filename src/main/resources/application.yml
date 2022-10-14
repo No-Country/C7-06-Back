@@ -1,15 +1,14 @@
 server:
-  port: 8091
+  port: 8081
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/db_animatch
-    username: root
-    password: admin
+    url: jdbc:mysql://${DB_HOST}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASS}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
 
 cloud:
   aws:
