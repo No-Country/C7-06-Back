@@ -35,7 +35,7 @@ Abrir [http://localhost:3000](http://localhost:3000) para verlo en tu navegador.
 Puedes encontrar nuestro sitio en el siguiente link: [https://animatchapp.herokuapp.com/](#)
 
 ## Modelo de Base de Datos
-<p align = "center"> <img src = "https://i.im.ge/2022/10/15/2DUuKm.db-animatch.png" /> </p>
+[![db-animatch.png](https://i.postimg.cc/kXtvdM7S/db-animatch.png)](https://postimg.cc/MvqQ7SMZ)
 
 <br/><br/>
 
