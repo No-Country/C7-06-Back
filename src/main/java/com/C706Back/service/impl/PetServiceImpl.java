@@ -58,7 +58,51 @@ public class PetServiceImpl implements PetService {
                 .totalElements(page.getTotalElements())
                 .totalPages(page.getTotalPages())
                 .isLastPage(page.isLast())
-                .petCardResponses(petCardResponses)
+                .content(petCardResponses)
+                .build();
+    }
+
+    @Override
+    public PetCardListResponse listPetsByAnimalType(String animal, int pageNumber, int pageSize, String orderBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Pet> page = null;
+
+        if (animal.toLowerCase().equals("cat"))
+            page = petRepository.findAllByAnimalType(AnimalType.CAT, pageable);
+
+        if (animal.toLowerCase().equals("dog"))
+            page = petRepository.findAllByAnimalType(AnimalType.DOG, pageable);
+
+        List<Pet> pets = page.getContent();
+        List<PetCardResponse> petCardResponses = pets.stream()
+                .map(PetCardMapper::mapToDto).collect(Collectors.toList());
+        return PetCardListResponse.builder()
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .isLastPage(page.isLast())
+                .content(petCardResponses)
+                .build();
+    }
+
+    @Override
+    public PetCardListResponse listFilteredPets(AnimalType animalType, Gender gender, Integer startAge, Integer endAge, String race, String location, int pageNumber, int pageSize, String orderBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Pet> page = petRepository.findAllByFilter(animalType, gender, startAge, endAge, race, location, pageable);
+
+        List<Pet> pets = page.getContent();
+        List<PetCardResponse> petCardResponses = pets.stream()
+                .map(PetCardMapper::mapToDto).collect(Collectors.toList());
+        return PetCardListResponse.builder()
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .isLastPage(page.isLast())
+                .content(petCardResponses)
                 .build();
     }
 
@@ -107,50 +151,6 @@ public class PetServiceImpl implements PetService {
                 .forEach(pictureRepository::delete);
 
         petRepository.delete(pet);
-    }
-
-    @Override
-    public PetCardListResponse listPetsByAnimalType(String animal, int pageNumber, int pageSize, String orderBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        Page<Pet> page = null;
-
-        if (animal.toLowerCase().equals("cat"))
-            page = petRepository.findAllByAnimalType(AnimalType.CAT, pageable);
-
-        if (animal.toLowerCase().equals("dog"))
-            page = petRepository.findAllByAnimalType(AnimalType.DOG, pageable);
-
-        List<Pet> pets = page.getContent();
-        List<PetCardResponse> petCardResponses = pets.stream()
-                .map(PetCardMapper::mapToDto).collect(Collectors.toList());
-        return PetCardListResponse.builder()
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .isLastPage(page.isLast())
-                .petCardResponses(petCardResponses)
-                .build();
-    }
-
-    @Override
-    public PetCardListResponse listFilteredPets(AnimalType animalType, Gender gender, Integer startAge, Integer endAge, String race, String location, int pageNumber, int pageSize, String orderBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        Page<Pet> page = petRepository.findAllByFilter(animalType, gender, startAge, endAge, race, location, pageable);
-
-        List<Pet> pets = page.getContent();
-        List<PetCardResponse> petCardResponses = pets.stream()
-                .map(PetCardMapper::mapToDto).collect(Collectors.toList());
-        return PetCardListResponse.builder()
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .isLastPage(page.isLast())
-                .petCardResponses(petCardResponses)
-                .build();
     }
 
 

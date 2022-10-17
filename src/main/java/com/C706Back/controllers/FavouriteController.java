@@ -2,6 +2,8 @@ package com.C706Back.controllers;
 
 import com.C706Back.models.dto.response.FavouriteCardListResponse;
 import com.C706Back.models.dto.response.FavouriteCardResponse;
+import com.C706Back.models.dto.response.PetCardListResponse;
+import com.C706Back.models.dto.response.PetCardResponse;
 import com.C706Back.models.enums.Role;
 import com.C706Back.service.FavouriteService;
 import com.C706Back.util.JwtUtils;
@@ -22,17 +24,37 @@ public class FavouriteController {
 
     @RequestMapping(path = "users/{userId}/favourites", method = RequestMethod.GET)
     private FavouriteCardListResponse listFavouritesByUser(@PathVariable(value = "userId") Long userId,
-                                                     @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-                                                     @RequestParam(value = "pageSize", defaultValue = "3", required = false) int pageSize,
-                                                     @RequestParam(value = "sortBy", defaultValue = "id", required = false) String orderBy,
-                                                     @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+                                                           @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+                                                           @RequestParam(value = "pageSize", defaultValue = "3", required = false) int pageSize,
+                                                           @RequestParam(value = "sortBy", defaultValue = "id", required = false) String orderBy,
+                                                           @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
 
         return favouriteService.listFavouritesByUser(userId, pageNumber, pageSize, orderBy, sortDir);
     }
 
-    @RequestMapping(path = "/favourites/{favouriteId}", method = RequestMethod.GET)
-    private ResponseEntity<FavouriteCardResponse> getFavourite(@PathVariable(value = "favouriteId") Long favouriteId) {
-        return ResponseEntity.ok(favouriteService.getFavouriteById(favouriteId));
+    @RequestMapping(path = "/suggestedPets", method = RequestMethod.GET)
+    private ResponseEntity<?> listSuggestedPets(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+                                                @RequestParam(value = "pageSize", defaultValue = "3", required = false) int pageSize,
+                                                @RequestParam(value = "sortBy", defaultValue = "id", required = false) String orderBy,
+                                                @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) throws Exception {
+
+        if (!jwtUtils.verify(token))
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN)))
+            return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
+
+        Long userId = jwtUtils.getUserId(token);
+
+        return new ResponseEntity<>(favouriteService.listSuggestedPets(userId, pageNumber, pageSize, orderBy, sortDir), HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/users/{userId}/favourites/{petId}", method = RequestMethod.GET)
+    private ResponseEntity<?> getIfIsFavourite(@PathVariable(value = "petId") Long petId, @PathVariable(value = "userId") Long userId) {
+        return ResponseEntity.ok(favouriteService.getIfIsFavourite(userId, petId));
     }
 
     @RequestMapping(path = "/pets/{petId}/favourites", method = RequestMethod.POST)

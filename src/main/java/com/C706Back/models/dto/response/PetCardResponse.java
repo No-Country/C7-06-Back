@@ -11,8 +11,9 @@ import lombok.Setter;
 @Setter
 public class PetCardResponse {
 
-    private Long petId;
+    private Long id;
     private PictureResponse pictureResponse;
+    private String animalType;
     private String name;
     private String race;
     private String gender;

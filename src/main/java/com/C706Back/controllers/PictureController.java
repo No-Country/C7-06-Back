@@ -122,6 +122,89 @@ public class PictureController {
         return result;
     }
 
+    /*
+    @RequestMapping(path = "/avatar", method = RequestMethod.POST)
+    private ResponseEntity<?> createAvatar(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file) throws Exception {
+        Map<String, String> result = new HashMap<>();
+        if (!jwtUtils.verify(token)) {
+            result.put("error", "Unhautorized");
+        }
+        //return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN))) {
+            result.put("error", "Unhautorized");
+        }
+
+        Long userId = jwtUtils.getUserId(token);
+        UserProfileResponse userProfileResponse = userService.getUserById(userId);
+
+        String path = "";
+        String key = "";
+
+        if (file.getContentType().equals("image/webp") || file.getContentType().equals("image/jpeg")
+                || file.getContentType().equals("image/png")) {
+            try {
+                if (file.getBytes().length > 1048576)
+                    throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                key = s3Service.putObject(file);
+                path = s3Service.getObjectUrl(key);
+                result.put("key", key);
+                result.put("path", path);
+
+                pictureService.createAvatar(userId, path, key);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return new ResponseEntity<result, HttpStatus.OK>;
+    }*/
+
+
+
+/*
+    @RequestMapping(path = "/pictures/{pictureId}", method = RequestMethod.PUT)
+    private ResponseEntity<?> updatePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
+        Map<String, String> result = new HashMap<>();
+        if (!jwtUtils.verify(token)) {
+            result.put("error", "Unhautorized");
+        }
+        return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN))) {
+            result.put("error", "Unhautorized");
+        }
+
+        String path = "";
+        String key = "";
+
+        if (file.getContentType().equals("image/webp") || file.getContentType().equals("image/jpeg")
+                || file.getContentType().equals("image/png")) {
+            try {
+                if (file.getBytes().length > 1048576)
+                    throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                key = s3Service.putObject(file);
+                path = s3Service.getObjectUrl(key);
+                result.put("key", key);
+                result.put("path", path);
+
+                pictureService.updatePicture(pictureId, path, key);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }*/
+
     @RequestMapping(path = "/pictures/{pictureId}", method = RequestMethod.PUT)
     private Map<String, String> updatePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
         Map<String, String> result = new HashMap<>();

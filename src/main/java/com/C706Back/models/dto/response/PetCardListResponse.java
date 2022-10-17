@@ -18,5 +18,5 @@ public class PetCardListResponse {
     private long totalElements;
     private int totalPages;
     private boolean isLastPage;
-    private List<PetCardResponse> petCardResponses;
+    private List<PetCardResponse> content;
 }
