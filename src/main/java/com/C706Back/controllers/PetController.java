@@ -40,17 +40,6 @@ public class PetController {
         return petService.listPetsByUser(userId, pageNumber, pageSize, orderBy, sortDir);
     }
 
-    @RequestMapping(path = "/petsByAnimalType", method = RequestMethod.GET)
-    private PetCardListResponse listPetsByAnimalType(
-            @RequestParam(value = "animal") String animalType,
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "4", required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "updatedDate", required = false) String orderBy,
-            @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir) {
-
-        return petService.listPetsByAnimalType(animalType, pageNumber, pageSize, orderBy, sortDir);
-    }
-
     @RequestMapping(path = "/filteredPets", method = RequestMethod.GET)
     private PetCardListResponse listFilteredPets(
             @RequestParam(value = "animal", required = false) String animalTypeParam,
