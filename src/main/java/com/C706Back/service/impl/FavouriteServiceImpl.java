@@ -92,14 +92,16 @@ public class FavouriteServiceImpl implements FavouriteService {
 
             averageAnimalType = cats.size() > dogs.size() ? AnimalType.CAT : AnimalType.DOG;
 
+
+            AnimalType finalAverageAnimalType = averageAnimalType;
             Set<Pet> males = pets.stream()
                     .filter(pet -> {
-                        return pet.getGender().equals(Gender.MALE);
+                        return pet.getGender().equals(Gender.MALE) && pet.getAnimalType().equals(finalAverageAnimalType);
                     }).collect(Collectors.toSet());
 
             Set<Pet> females = pets.stream()
                     .filter(pet -> {
-                        return pet.getGender().equals(Gender.FEMALE);
+                        return pet.getGender().equals(Gender.FEMALE) && pet.getAnimalType().equals(finalAverageAnimalType);
                     }).collect(Collectors.toSet());
 
             suggestedGender = males.size() > females.size() ? Gender.FEMALE : Gender.MALE;
