@@ -83,8 +83,10 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetProfileResponse createPet(Long userId, PetProfileRequest petProfileRequest) {
+        System.out.println("Searching user");
         User user = userRepository
                 .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        System.out.println("User searched: " + user);
         Location location = locationRepository.findByName(petProfileRequest.getLocation()).orElse(null);
         if (location == null) {
             location = locationRepository.save(Location.builder()
