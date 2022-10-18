@@ -61,6 +61,7 @@ public class JwtUtils {
         engine.eval("var obj = JSON.parse('" + payload + "');");
         engine.eval("var role = obj.role");
         String role = engine.get("role").toString();
+        System.out.println("Role: " + role);
 
         if(role.equals("admin"))
             return Role.ADMIN;
