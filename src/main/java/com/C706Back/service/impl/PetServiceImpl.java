@@ -49,7 +49,7 @@ public class PetServiceImpl implements PetService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Pet> page = petRepository.findByUserId(userId, pageable);
         List<Pet> pets = page.getContent();
-        List<PetCardResponse> petCardResponses = pets.stream()
+        List<PetCardResponse> content = pets.stream()
                 .map(PetCardMapper::mapToDto).collect(Collectors.toList());
 
         return PetCardListResponse.builder()
@@ -58,7 +58,7 @@ public class PetServiceImpl implements PetService {
                 .totalElements(page.getTotalElements())
                 .totalPages(page.getTotalPages())
                 .isLastPage(page.isLast())
-                .content(petCardResponses)
+                .content(content)
                 .build();
     }
 
@@ -69,7 +69,7 @@ public class PetServiceImpl implements PetService {
         Page<Pet> page = petRepository.findAllByFilter(animalType, gender, startAge, endAge, race, location, pageable);
 
         List<Pet> pets = page.getContent();
-        List<PetCardResponse> petCardResponses = pets.stream()
+        List<PetCardResponse> content = pets.stream()
                 .map(PetCardMapper::mapToDto).collect(Collectors.toList());
         return PetCardListResponse.builder()
                 .pageNumber(page.getNumber())
@@ -77,7 +77,7 @@ public class PetServiceImpl implements PetService {
                 .totalElements(page.getTotalElements())
                 .totalPages(page.getTotalPages())
                 .isLastPage(page.isLast())
-                .content(petCardResponses)
+                .content(content)
                 .build();
     }
 
