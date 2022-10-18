@@ -64,10 +64,10 @@ public class JwtUtils {
         System.out.println("Role: " + role);
 
         if(role.equals("admin"))
-            return Role.ADMIN;
+            return Role.admin;
 
         if(role.equals("user"))
-            return Role.USER;
+            return Role.user;
 
         return null;
     }

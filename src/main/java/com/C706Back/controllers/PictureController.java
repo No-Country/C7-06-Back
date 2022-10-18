@@ -48,7 +48,7 @@ public class PictureController {
 
         Role role = jwtUtils.getRole(token);
 
-        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN))) {
+        if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
             result.put("error", "Unhautorized");
         }
         //return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
@@ -91,7 +91,7 @@ public class PictureController {
 
         Role role = jwtUtils.getRole(token);
 
-        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN))) {
+        if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
             result.put("error", "Unhautorized");
         }
 
@@ -215,7 +215,7 @@ public class PictureController {
 
         Role role = jwtUtils.getRole(token);
 
-        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN))) {
+        if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
             result.put("error", "Unhautorized");
         }
 
@@ -253,7 +253,7 @@ public class PictureController {
 
         Role role = jwtUtils.getRole(token);
 
-        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN))) {
+        if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
             result.put("error", "Unhautorized");
         }
 

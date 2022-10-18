@@ -44,7 +44,7 @@ public class FavouriteController {
 
         Role role = jwtUtils.getRole(token);
 
-        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN)))
+        if ((!role.equals(Role.user) && !role.equals(Role.admin)))
             return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
 
         Long userId = jwtUtils.getUserId(token);
@@ -65,7 +65,7 @@ public class FavouriteController {
 
         Role role = jwtUtils.getRole(token);
 
-        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN)))
+        if ((!role.equals(Role.user) && !role.equals(Role.admin)))
             return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
 
         Long userId = jwtUtils.getUserId(token);
@@ -81,7 +81,7 @@ public class FavouriteController {
 
         Role role = jwtUtils.getRole(token);
 
-        if ((!role.equals(Role.USER) && !role.equals(Role.ADMIN)))
+        if ((!role.equals(Role.user) && !role.equals(Role.admin)))
             return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
 
         favouriteService.deleteFavourite(favouriteId);
