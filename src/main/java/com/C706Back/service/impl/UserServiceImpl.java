@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getPicture() != null)
             pictureResponse = PictureResponse.builder()
+                    .id(user.getPicture().getId())
                     .path(user.getPicture().getPath())
                     .build();
         UserProfileResponse userProfileResponse = UserProfileResponse.builder()
