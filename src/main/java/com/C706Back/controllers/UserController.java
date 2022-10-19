@@ -18,7 +18,7 @@ public class UserController {
 
     private final JwtUtils jwtUtils;
 
-    @RequestMapping(path = "/users", method = RequestMethod.GET)
+    @RequestMapping(path = "/userProfile", method = RequestMethod.GET)
     private ResponseEntity<?> getUserById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws Exception {
 
         if (!jwtUtils.verify(token))
@@ -31,7 +31,7 @@ public class UserController {
 
         Long userId = jwtUtils.getUserId(token);
 
-        return ResponseEntity.ok(userService.getUserById(userId));
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
 
     }
 }
