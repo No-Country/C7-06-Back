@@ -356,6 +356,112 @@ public class PictureController {
         return result;
     }
 
+    @RequestMapping(path = "/pets/pictures", method = RequestMethod.PUT)
+    private Map<String, String> updatePictures(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                               @RequestParam(required = false, name = "picture1") MultipartFile picture1,
+                                               @RequestParam(required = false, name = "picture2") MultipartFile picture2,
+                                               @RequestParam(required = false, name = "picture3") MultipartFile picture3,
+                                               @RequestParam(required = false, name = "picture4") MultipartFile picture4,
+                                               @RequestParam(value = "pictureId1", required = false) Long pictureId1,
+                                               @RequestParam(value = "pictureId2", required = false) Long pictureId2,
+                                               @RequestParam(value = "pictureId3", required = false) Long pictureId3,
+                                               @RequestParam(value = "pictureId4", required = false) Long pictureId4) throws Exception {
+        Map<String, String> result = new HashMap<>();
+        if (!jwtUtils.verify(token)) {
+            result.put("error", "Unhautorized");
+        }
+        //return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
+            result.put("error", "Unhautorized");
+        }
+
+        String path1 = "";
+        String path2 = "";
+        String path3 = "";
+        String path4 = "";
+
+        if (picture1 != null && pictureId1 != null) {
+            if (picture1.getContentType().equals("image/webp") || picture1.getContentType().equals("image/jpeg")
+                    || picture1.getContentType().equals("image/png")) {
+                try {
+                    if (picture1.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    String key = s3Service.putObject(picture1);
+                    path1 = s3Service.getObjectUrl(key);
+                    result.put("path1", path1);
+
+                    pictureService.updatePicture(pictureId1, path1, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (picture2 != null && pictureId2 != null) {
+            if (picture2.getContentType().equals("image/webp") || picture2.getContentType().equals("image/jpeg")
+                    || picture2.getContentType().equals("image/png")) {
+                try {
+                    if (picture2.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    String key = s3Service.putObject(picture2);
+                    path2 = s3Service.getObjectUrl(key);
+                    result.put("path2", path2);
+
+                    pictureService.updatePicture(pictureId2, path2, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (picture3 != null && pictureId3 != null) {
+            if (picture3.getContentType().equals("image/webp") || picture3.getContentType().equals("image/jpeg")
+                    || picture3.getContentType().equals("image/png")) {
+                try {
+                    if (picture3.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    String key = s3Service.putObject(picture3);
+                    path3 = s3Service.getObjectUrl(key);
+                    result.put("path3", path3);
+
+                    pictureService.updatePicture(pictureId3, path3, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (picture4 != null && pictureId4 != null) {
+            if (picture4.getContentType().equals("image/webp") || picture4.getContentType().equals("image/jpeg")
+                    || picture4.getContentType().equals("image/png")) {
+                try {
+                    if (picture4.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    String key = s3Service.putObject(picture4);
+                    path4 = s3Service.getObjectUrl(key);
+                    result.put("path4", path4);
+
+                    pictureService.updatePicture(pictureId4, path4, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return result;
+    }
+
     @RequestMapping(path = "/pictures/{pictureId}", method = RequestMethod.DELETE)
     private ResponseEntity<String> deletePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
         Map<String, String> result = new HashMap<>();
