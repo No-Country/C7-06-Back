@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -78,21 +80,22 @@ public class PictureController {
     }
 
     @RequestMapping(path = "pets/{petId}/pictures", method = RequestMethod.POST)
-    private Map<String, String> createPetPictures(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                  @RequestParam(required = false, name = "picture1") MultipartFile picture1,
-                                                  @RequestParam(required = false, name = "picture2") MultipartFile picture2,
-                                                  @RequestParam(required = false, name = "picture3") MultipartFile picture3,
-                                                  @RequestParam(required = false, name = "picture4") MultipartFile picture4,
-                                                  @PathVariable(value = "petId") Long petId) throws Exception {
-        Map<String, String> result = new HashMap<>();
+    private ResponseEntity<?> createPetPictures(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                @RequestParam(required = false, name = "picture1") MultipartFile picture1,
+                                                @RequestParam(required = false, name = "picture2") MultipartFile picture2,
+                                                @RequestParam(required = false, name = "picture3") MultipartFile picture3,
+                                                @RequestParam(required = false, name = "picture4") MultipartFile picture4,
+                                                @PathVariable(value = "petId") Long petId) throws Exception {
         if (!jwtUtils.verify(token)) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         Role role = jwtUtils.getRole(token);
 
+        List<PictureResponse> pictures = new ArrayList<>();
+
         if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         String path1 = "";
@@ -113,9 +116,9 @@ public class PictureController {
 
                     String key = s3Service.putObject(picture1);
                     path1 = s3Service.getObjectUrl(key);
-                    result.put("path1", path1);
 
-                    pictureService.createPetPicture(petId, path1, key);
+                    PictureResponse pictureResponse = pictureService.createPetPicture(petId, path1, key);
+                    pictures.add(pictureResponse);
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -135,9 +138,9 @@ public class PictureController {
 
                     String key = s3Service.putObject(picture2);
                     path2 = s3Service.getObjectUrl(key);
-                    result.put("path2", path2);
 
-                    pictureService.createPetPicture(petId, path2, key);
+                    PictureResponse pictureResponse = pictureService.createPetPicture(petId, path2, key);
+                    pictures.add(pictureResponse);
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -157,9 +160,9 @@ public class PictureController {
 
                     String key = s3Service.putObject(picture3);
                     path3 = s3Service.getObjectUrl(key);
-                    result.put("path3", path3);
 
-                    pictureService.createPetPicture(petId, path3, key);
+                    PictureResponse pictureResponse = pictureService.createPetPicture(petId, path3, key);
+                    pictures.add(pictureResponse);
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -179,9 +182,9 @@ public class PictureController {
 
                     String key = s3Service.putObject(picture4);
                     path4 = s3Service.getObjectUrl(key);
-                    result.put("path4", path4);
 
-                    pictureService.createPetPicture(petId, path4, key);
+                    PictureResponse pictureResponse = pictureService.createPetPicture(petId, path4, key);
+                    pictures.add(pictureResponse);
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -189,7 +192,7 @@ public class PictureController {
             }
         }
 
-        return result;
+        return new ResponseEntity<>(pictures, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/avatar", method = RequestMethod.POST)
@@ -498,25 +501,25 @@ public class PictureController {
         }
 
 
-        if(pictureId1 != null){
+        if (pictureId1 != null) {
             Picture picture = pictureService.getPicture(pictureId1);
             s3Service.deleteObject(picture.getKeyNumber());
             pictureService.deletePicture(pictureId1);
         }
 
-        if(pictureId2 != null){
+        if (pictureId2 != null) {
             Picture picture = pictureService.getPicture(pictureId2);
             s3Service.deleteObject(picture.getKeyNumber());
             pictureService.deletePicture(pictureId2);
         }
 
-        if(pictureId3 != null){
+        if (pictureId3 != null) {
             Picture picture = pictureService.getPicture(pictureId3);
             s3Service.deleteObject(picture.getKeyNumber());
             pictureService.deletePicture(pictureId3);
         }
 
-        if(pictureId4 != null){
+        if (pictureId4 != null) {
             Picture picture = pictureService.getPicture(pictureId4);
             s3Service.deleteObject(picture.getKeyNumber());
             pictureService.deletePicture(pictureId4);
