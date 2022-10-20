@@ -484,4 +484,51 @@ public class PictureController {
 
         return new ResponseEntity<>("Picture was deleted", HttpStatus.OK);
     }
+
+    @RequestMapping(path = "/pictures", method = RequestMethod.DELETE)
+    private ResponseEntity<String> deletePictures(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam(value = "pictureId1", required = false) Long pictureId1,
+            @RequestParam(value = "pictureId2", required = false) Long pictureId2,
+            @RequestParam(value = "pictureId3", required = false) Long pictureId3,
+            @RequestParam(value = "pictureId4", required = false) Long pictureId4) throws Exception {
+        Map<String, String> result = new HashMap<>();
+        if (!jwtUtils.verify(token)) {
+            result.put("error", "Unhautorized");
+        }
+        //return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
+            result.put("error", "Unhautorized");
+        }
+
+
+        if(pictureId1 != null){
+            Picture picture = pictureService.getPicture(pictureId1);
+            s3Service.deleteObject(picture.getKeyNumber());
+            pictureService.deletePicture(pictureId1);
+        }
+
+        if(pictureId2 != null){
+            Picture picture = pictureService.getPicture(pictureId2);
+            s3Service.deleteObject(picture.getKeyNumber());
+            pictureService.deletePicture(pictureId2);
+        }
+
+        if(pictureId3 != null){
+            Picture picture = pictureService.getPicture(pictureId3);
+            s3Service.deleteObject(picture.getKeyNumber());
+            pictureService.deletePicture(pictureId3);
+        }
+
+        if(pictureId4 != null){
+            Picture picture = pictureService.getPicture(pictureId4);
+            s3Service.deleteObject(picture.getKeyNumber());
+            pictureService.deletePicture(pictureId4);
+        }
+
+        return new ResponseEntity<>("Pictures was deleted", HttpStatus.OK);
+    }
 }
