@@ -38,20 +38,18 @@ public class PictureController {
 
     private final JwtUtils jwtUtils;
 
-    @RequestMapping(path = "pets/{petId}/pictures", method = RequestMethod.POST)
+    @RequestMapping(path = "pets/{petId}/picture", method = RequestMethod.POST)
     private Map<String, String> createPetPicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "petId") Long petId) throws Exception {
         Map<String, String> result = new HashMap<>();
         if (!jwtUtils.verify(token)) {
             result.put("error", "Unhautorized");
         }
-        //return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
 
         Role role = jwtUtils.getRole(token);
 
         if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
             result.put("error", "Unhautorized");
         }
-        //return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
 
         String path = "";
         String key = "";
@@ -78,6 +76,121 @@ public class PictureController {
                 throw new RuntimeException(e);
             }
         }
+        return result;
+    }
+
+    @RequestMapping(path = "pets/{petId}/pictures", method = RequestMethod.POST)
+    private Map<String, String> createPetPictures(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                  @RequestParam(required = false, name = "picture1") MultipartFile picture1,
+                                                  @RequestParam(required = false, name = "picture2") MultipartFile picture2,
+                                                  @RequestParam(required = false, name = "picture3") MultipartFile picture3,
+                                                  @RequestParam(required = false, name = "picture4") MultipartFile picture4,
+                                                  @PathVariable(value = "petId") Long petId) throws Exception {
+        Map<String, String> result = new HashMap<>();
+        if (!jwtUtils.verify(token)) {
+            result.put("error", "Unhautorized");
+        }
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
+            result.put("error", "Unhautorized");
+        }
+
+        String path1 = "";
+        String path2 = "";
+        String path3 = "";
+        String path4 = "";
+        PetProfileResponse petProfileResponse = petService.getPetById(petId);
+
+        if (picture1 != null) {
+            if (picture1.getContentType().equals("image/webp") || picture1.getContentType().equals("image/jpeg")
+                    || picture1.getContentType().equals("image/png")) {
+                try {
+                    if (picture1.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    if (petProfileResponse.getPictures().size() == 4)
+                        throw new OutOfBoundUploadFilesException("The number of uploaded files has reached its limit.");
+
+                    String key = s3Service.putObject(picture1);
+                    path1 = s3Service.getObjectUrl(key);
+                    result.put("path1", path1);
+
+                    pictureService.createPetPicture(petId, path1, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (picture2 != null) {
+            if (picture2.getContentType().equals("image/webp") || picture2.getContentType().equals("image/jpeg")
+                    || picture2.getContentType().equals("image/png")) {
+                try {
+                    if (picture2.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    if (petProfileResponse.getPictures().size() == 4)
+                        throw new OutOfBoundUploadFilesException("The number of uploaded files has reached its limit.");
+
+                    String key = s3Service.putObject(picture2);
+                    path2 = s3Service.getObjectUrl(key);
+                    result.put("path2", path2);
+
+                    pictureService.createPetPicture(petId, path2, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (picture3 != null) {
+            if (picture3.getContentType().equals("image/webp") || picture3.getContentType().equals("image/jpeg")
+                    || picture3.getContentType().equals("image/png")) {
+                try {
+                    if (picture3.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    if (petProfileResponse.getPictures().size() == 4)
+                        throw new OutOfBoundUploadFilesException("The number of uploaded files has reached its limit.");
+
+                    String key = s3Service.putObject(picture3);
+                    path3 = s3Service.getObjectUrl(key);
+                    result.put("path3", path3);
+
+                    pictureService.createPetPicture(petId, path3, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (picture4 != null) {
+            if (picture4.getContentType().equals("image/webp") || picture4.getContentType().equals("image/jpeg")
+                    || picture4.getContentType().equals("image/png")) {
+                try {
+                    if (picture4.getBytes().length > 1048576)
+                        throw new FileSizeExceedException("The size of the file is too large to upload");
+
+                    if (petProfileResponse.getPictures().size() == 4)
+                        throw new OutOfBoundUploadFilesException("The number of uploaded files has reached its limit.");
+
+                    String key = s3Service.putObject(picture4);
+                    path4 = s3Service.getObjectUrl(key);
+                    result.put("path4", path4);
+
+                    pictureService.createPetPicture(petId, path4, key);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
         return result;
     }
 
