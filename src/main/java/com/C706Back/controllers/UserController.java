@@ -34,4 +34,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
 
     }
+
+    @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
+    private ResponseEntity<?> getUserById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "userId") Long userId) throws Exception {
+
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+
+    }
 }
