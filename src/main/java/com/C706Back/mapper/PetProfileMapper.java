@@ -41,6 +41,7 @@ public class PetProfileMapper {
         }
         return PetProfileResponse.builder()
                 .id(pet.getId())
+                .userId(pet.getUser().getId())
                 .name(pet.getName())
                 .age(pet.getAge())
                 .location(pet.getLocation().getName())

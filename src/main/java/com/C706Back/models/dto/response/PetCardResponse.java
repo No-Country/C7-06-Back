@@ -12,6 +12,7 @@ import lombok.Setter;
 public class PetCardResponse {
 
     private Long id;
+    private Long userId;
     private PictureResponse pictureResponse;
     private String animalType;
     private String name;

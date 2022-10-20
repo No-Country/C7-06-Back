@@ -50,7 +50,7 @@ public class PetServiceImpl implements PetService {
         Page<Pet> page = petRepository.findByUserId(userId, pageable);
         List<Pet> pets = page.getContent();
         List<PetCardResponse> content = pets.stream()
-                .map(PetCardMapper::mapToDto).collect(Collectors.toList());
+                .map(pet -> PetCardMapper.mapToDto(pet, userId)).collect(Collectors.toList());
 
         return PetCardListResponse.builder()
                 .pageNumber(page.getNumber())
@@ -70,7 +70,7 @@ public class PetServiceImpl implements PetService {
 
         List<Pet> pets = page.getContent();
         List<PetCardResponse> content = pets.stream()
-                .map(PetCardMapper::mapToDto).collect(Collectors.toList());
+                .map(pet -> PetCardMapper.mapToDto(pet, pet.getUser().getId())).collect(Collectors.toList());
         return PetCardListResponse.builder()
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())

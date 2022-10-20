@@ -20,6 +20,8 @@ public class PetProfileResponse {
 
     private Long id;
 
+    private Long userId;
+
     private String name;
 
     private int age;

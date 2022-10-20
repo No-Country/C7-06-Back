@@ -52,7 +52,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         List<Favourite> favouriteList = page.getContent();
         List<FavouriteCardResponse> favouriteCardResponseList = favouriteList.stream()
                 .map(favourite -> {
-                    return FavouriteCardMapper.mapToDto(favourite);
+                    return FavouriteCardMapper.mapToDto(favourite, userId);
                 }).collect(Collectors.toList());
 
         return FavouriteCardListResponse.builder()
@@ -70,6 +70,8 @@ public class FavouriteServiceImpl implements FavouriteService {
 
         User user = userRepository
                 .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+
 
         List<Favourite> favourites = user.getFavourites();
 
@@ -116,7 +118,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         List<Pet> petList = page.getContent();
 
         List<PetCardResponse> petCardResponseList = petList.stream()
-                .map(PetCardMapper::mapToDto).collect(Collectors.toList());
+                .map(pet -> PetCardMapper.mapToDto(pet, pet.getUser().getId())).collect(Collectors.toList());
 
         return PetCardListResponse.builder()
                 .pageNumber(page.getNumber())
@@ -188,7 +190,7 @@ public class FavouriteServiceImpl implements FavouriteService {
             favouriteInserted = favouriteRepository.save(favourite);
             System.out.println("AQUI TMB");
         }
-        return FavouriteCardMapper.mapToDto(favouriteInserted);
+        return FavouriteCardMapper.mapToDto(favouriteInserted, userId);
     }
 
     @Override

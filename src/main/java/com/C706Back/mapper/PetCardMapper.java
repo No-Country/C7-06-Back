@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PetCardMapper {
 
-    public static PetCardResponse mapToDto(Pet pet) {
+    public static PetCardResponse mapToDto(Pet pet, Long userId) {
         List<Picture> pictures = pet.getPictures();
         PictureResponse pictureResponse = null;
         if (!pictures.isEmpty()) {
@@ -18,6 +18,7 @@ public class PetCardMapper {
         }
         return PetCardResponse.builder()
                 .id(pet.getId())
+                .userId(userId)
                 .name(pet.getName())
                 .animalType(pet.getAnimalType().toString())
                 .race(pet.getRace())

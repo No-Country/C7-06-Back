@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class FavouriteCardResponse {
     private Long id;
+    private Long userId;
     private PictureResponse pictureResponse;
     private String name;
     private String race;
