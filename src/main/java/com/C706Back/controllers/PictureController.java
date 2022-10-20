@@ -463,26 +463,24 @@ public class PictureController {
     }
 
     @RequestMapping(path = "/pictures/{pictureId}", method = RequestMethod.DELETE)
-    private ResponseEntity<String> deletePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
-        Map<String, String> result = new HashMap<>();
+    private ResponseEntity<?> deletePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
         if (!jwtUtils.verify(token)) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
-        //return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
 
         Role role = jwtUtils.getRole(token);
 
         if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
-
         Picture picture = pictureService.getPicture(pictureId);
+        PictureResponse pictureResponse = new PictureResponse(pictureId, picture.getPath());
         s3Service.deleteObject(picture.getKeyNumber());
 
         pictureService.deletePicture(pictureId);
 
-        return new ResponseEntity<>("Picture was deleted", HttpStatus.OK);
+        return new ResponseEntity<>(pictureResponse, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/pictures", method = RequestMethod.DELETE)

@@ -130,6 +130,30 @@ public class FavouriteServiceImpl implements FavouriteService {
                 .build();
     }
 
+    /*
+    @Override
+    public PetCardListResponse listSuggestedPets(Long userId, int pageNumber, int pageSize, String orderBy, String sortDir) {
+
+        User user = userRepository
+                .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        List<Pet> userPets = user.getPets();
+
+        if(userPets.isEmpty()){
+
+        }
+
+        Pet userPet = userPets.get(0);
+
+
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<Pet> page = petRepository.findAllByFilter(userPet.getAnimalType(), suggestedGender, null, null, null, null, pageable);
+
+
+    }*/
+
     @Override
     public boolean getIfIsFavourite(Long userId, Long petId) {
         Pet pet = petRepository
