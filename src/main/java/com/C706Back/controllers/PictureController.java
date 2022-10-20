@@ -39,16 +39,15 @@ public class PictureController {
     private final JwtUtils jwtUtils;
 
     @RequestMapping(path = "pets/{petId}/picture", method = RequestMethod.POST)
-    private Map<String, String> createPetPicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "petId") Long petId) throws Exception {
-        Map<String, String> result = new HashMap<>();
+    private ResponseEntity<?> createPetPicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "petId") Long petId) throws Exception {
         if (!jwtUtils.verify(token)) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         Role role = jwtUtils.getRole(token);
 
         if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         String path = "";
@@ -66,17 +65,16 @@ public class PictureController {
 
                 key = s3Service.putObject(file);
                 path = s3Service.getObjectUrl(key);
-                result.put("key", key);
-                result.put("path", path);
-                System.out.println("aqui");
 
-                pictureService.createPetPicture(petId, path, key);
+                PictureResponse pictureResponse = pictureService.createPetPicture(petId, path, key);
+
+                return new ResponseEntity<>(pictureResponse, HttpStatus.OK);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        return result;
+        return null;
     }
 
     @RequestMapping(path = "pets/{petId}/pictures", method = RequestMethod.POST)
@@ -195,17 +193,15 @@ public class PictureController {
     }
 
     @RequestMapping(path = "/avatar", method = RequestMethod.POST)
-    private Map<String, String> createAvatar(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file) throws Exception {
-        Map<String, String> result = new HashMap<>();
+    private ResponseEntity<?> createAvatar(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file) throws Exception {
         if (!jwtUtils.verify(token)) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
-        //return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
 
         Role role = jwtUtils.getRole(token);
 
         if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         Long userId = jwtUtils.getUserId(token);
@@ -222,17 +218,16 @@ public class PictureController {
 
                 key = s3Service.putObject(file);
                 path = s3Service.getObjectUrl(key);
-                result.put("key", key);
-                result.put("path", path);
 
-                pictureService.createAvatar(userId, path, key);
+                PictureResponse pictureResponse = pictureService.createAvatar(userId, path, key);
+                return new ResponseEntity<>(pictureResponse, HttpStatus.OK);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        return result;
+        return null;
     }
 
     /*
