@@ -71,88 +71,67 @@ public class FavouriteServiceImpl implements FavouriteService {
         User user = userRepository
                 .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-
-
-        List<Favourite> favourites = user.getFavourites();
-
-        AnimalType averageAnimalType = null;
-        Gender suggestedGender = null;
-
-        if (favourites != null || !favourites.isEmpty()) {
-            List<Pet> pets = favourites.stream()
-                    .map(Favourite::getPet).collect(Collectors.toList());
-
-            Set<Pet> cats = pets.stream()
-                    .filter(pet -> {
-                        return pet.getAnimalType().equals(AnimalType.CAT);
-                    }).collect(Collectors.toSet());
-
-            Set<Pet> dogs = pets.stream()
-                    .filter(pet -> {
-                        return pet.getAnimalType().equals(AnimalType.DOG);
-                    }).collect(Collectors.toSet());
-
-            averageAnimalType = cats.size() > dogs.size() ? AnimalType.CAT : AnimalType.DOG;
-
-
-            AnimalType finalAverageAnimalType = averageAnimalType;
-            Set<Pet> males = pets.stream()
-                    .filter(pet -> {
-                        return pet.getGender().equals(Gender.MALE) && pet.getAnimalType().equals(finalAverageAnimalType);
-                    }).collect(Collectors.toSet());
-
-            Set<Pet> females = pets.stream()
-                    .filter(pet -> {
-                        return pet.getGender().equals(Gender.FEMALE) && pet.getAnimalType().equals(finalAverageAnimalType);
-                    }).collect(Collectors.toSet());
-
-            suggestedGender = males.size() > females.size() ? Gender.FEMALE : Gender.MALE;
-
-        }
+        List<Pet> userPets = user.getPets();
 
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Pet> page = null;
 
-        Page<Pet> page = petRepository.findAllByFilter(averageAnimalType, suggestedGender, null, null, null, null, pageable);
+        if (userPets.isEmpty()) {
+            page = petRepository.findAllByFilter(null, null, null, null, null, null, pageable);
+        } else {
+            Pet userPet = userPets.get(0);
+            Gender oppositeGender = userPet.getGender().equals(Gender.MALE) ? Gender.FEMALE : Gender.MALE;
+            int userPetAge = userPet.getAge();
+            int startAge = 0;
+            int endAge = 0;
+            if (userPetAge > 0 && userPetAge <= 3) {
+                startAge = 0;
+                endAge = 3;
+            }
+
+            if (userPetAge > 3 && userPetAge <= 6) {
+                startAge = 0;
+                endAge = 3;
+            }
+
+            if (userPetAge > 6) {
+                startAge = 0;
+                endAge = 3;
+            }
+
+            page = petRepository.findAllByFilter(userPet.getAnimalType(), oppositeGender, startAge, endAge, userPet.getRace(), null, pageable);
+
+            if (page.getContent().size() == 0) {
+                page = petRepository.findAllByFilter(userPet.getAnimalType(), oppositeGender, startAge, endAge, null, null, pageable);
+            }
+        }
 
         List<Pet> petList = page.getContent();
 
-        List<PetCardResponse> petCardResponseList = petList.stream()
-                .map(pet -> PetCardMapper.mapToDto(pet, pet.getUser().getId())).collect(Collectors.toList());
+        if (!petList.isEmpty()) {
 
-        return PetCardListResponse.builder()
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .isLastPage(page.isLast())
-                .content(petCardResponseList)
-                .build();
-    }
+            petList = petList.stream()
+                    .filter(pet -> {
+                        return pet.getUser().getId() != userId;
+                    }).collect(Collectors.toList());
 
-    /*
-    @Override
-    public PetCardListResponse listSuggestedPets(Long userId, int pageNumber, int pageSize, String orderBy, String sortDir) {
+            List<PetCardResponse> petCardResponseList = petList.stream()
+                    .map(pet -> PetCardMapper.mapToDto(pet, pet.getUser().getId())).collect(Collectors.toList());
 
-        User user = userRepository
-                .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
-        List<Pet> userPets = user.getPets();
-
-        if(userPets.isEmpty()){
-
+            return PetCardListResponse.builder()
+                    .pageNumber(page.getNumber())
+                    .pageSize(page.getSize())
+                    .totalElements(page.getTotalElements())
+                    .totalPages(page.getTotalPages())
+                    .isLastPage(page.isLast())
+                    .content(petCardResponseList)
+                    .build();
         }
 
-        Pet userPet = userPets.get(0);
+        return null;
 
-
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-
-        Page<Pet> page = petRepository.findAllByFilter(userPet.getAnimalType(), suggestedGender, null, null, null, null, pageable);
-
-
-    }*/
+    }
 
     @Override
     public boolean getIfIsFavourite(Long userId, Long petId) {
