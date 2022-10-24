@@ -12,7 +12,6 @@ import com.C706Back.models.dto.response.PetCardResponse;
 import com.C706Back.models.entity.Favourite;
 import com.C706Back.models.entity.Pet;
 import com.C706Back.models.entity.User;
-import com.C706Back.models.enums.AnimalType;
 import com.C706Back.models.enums.Gender;
 import com.C706Back.repository.FavouriteRepository;
 import com.C706Back.repository.PetRepository;

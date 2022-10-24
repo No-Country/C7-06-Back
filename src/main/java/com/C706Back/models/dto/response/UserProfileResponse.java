@@ -7,7 +7,9 @@ import lombok.Builder;
 @Builder
 public class UserProfileResponse {
     private Long id;
-    private String fullName;
+    private String name;
+
+    private String surname;
     private String email;
     private String address;
     private String description;
@@ -25,12 +27,20 @@ public class UserProfileResponse {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {

@@ -31,7 +31,8 @@ public class UserServiceImpl implements UserService {
                     .build();
         UserProfileResponse userProfileResponse = UserProfileResponse.builder()
                 .id(user.getId())
-                .fullName(user.getName() + " " + user.getSurname())
+                .name(user.getName())
+                .surname(user.getSurname())
                 .email(user.getEmail())
                 .address(user.getAddress())
                 .description(user.getDescription())
