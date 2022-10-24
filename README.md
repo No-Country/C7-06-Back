@@ -14,25 +14,17 @@
 
 ### Front
 
-En el directorio del proyecto ingresa este comando:
+Ingresar a :
 
-### `npm start`
-
-Abrir [http://localhost:3000](http://localhost:3000) para verlo en tu navegador.
+Abrir [https://animatch.ingenial.co/](https://animatch.ingenial.co/) para verlo en tu navegador.
 
 ### API
 
-\_1 -
-
-\_2 -
-
-\_3 -
-
-\_4 -
+Documentación de la API: [https://docs.google.com/document/d/1YQ0MBRoH7qwExRue2GAMfnuWWyKbU4wHfwTE1wuD4HQ/edit?usp=sharing](https://docs.google.com/document/d/1YQ0MBRoH7qwExRue2GAMfnuWWyKbU4wHfwTE1wuD4HQ/edit?usp=sharing)
 
 ## Deploy de la API
 
-Puedes encontrar nuestro sitio en el siguiente link: [https://animatchapp.herokuapp.com/](#)
+Puedes encontrar nuestro sitio en el siguiente link: [https://animatchapp.herokuapp.com/](https://animatchapp.herokuapp.com/)
 
 ## Modelo de Base de Datos
 [![db-animatch.png](https://i.postimg.cc/kXtvdM7S/db-animatch.png)](https://postimg.cc/MvqQ7SMZ)
