@@ -317,17 +317,15 @@ public class PictureController {
     }*/
 
     @RequestMapping(path = "/pictures/{pictureId}", method = RequestMethod.PUT)
-    private Map<String, String> updatePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
-        Map<String, String> result = new HashMap<>();
+    private ResponseEntity<?> updatePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam MultipartFile file, @PathVariable(value = "pictureId") Long pictureId) throws Exception {
         if (!jwtUtils.verify(token)) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
-        //return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
 
         Role role = jwtUtils.getRole(token);
 
         if ((!role.equals(Role.user) && !role.equals(Role.admin))) {
-            result.put("error", "Unhautorized");
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         String path = "";
@@ -341,17 +339,16 @@ public class PictureController {
 
                 key = s3Service.putObject(file);
                 path = s3Service.getObjectUrl(key);
-                result.put("key", key);
-                result.put("path", path);
 
-                pictureService.updatePicture(pictureId, path, key);
+                PictureResponse pictureResponse = pictureService.updatePicture(pictureId, path, key);
+                return new ResponseEntity<>(pictureResponse, HttpStatus.OK);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        return result;
+        return null;
     }
 
     @RequestMapping(path = "/pets/pictures", method = RequestMethod.PUT)
