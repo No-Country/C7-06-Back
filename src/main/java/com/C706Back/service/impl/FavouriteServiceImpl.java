@@ -50,7 +50,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         List<Favourite> favouriteList = page.getContent();
         List<FavouriteCardResponse> favouriteCardResponseList = favouriteList.stream()
                 .map(favourite -> {
-                    return FavouriteCardMapper.mapToDto(favourite, userId);
+                    return FavouriteCardMapper.mapToDto(favourite);
                 }).collect(Collectors.toList());
 
         return FavouriteCardListResponse.builder()
@@ -191,7 +191,7 @@ public class FavouriteServiceImpl implements FavouriteService {
             favouriteInserted = favouriteRepository.save(favourite);
             System.out.println("AQUI TMB");
         }
-        return FavouriteCardMapper.mapToDto(favouriteInserted, userId);
+        return FavouriteCardMapper.mapToDto(favouriteInserted);
     }
 
     @Override

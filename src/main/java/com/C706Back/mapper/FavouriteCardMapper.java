@@ -7,7 +7,7 @@ import com.C706Back.models.entity.Picture;
 
 public class FavouriteCardMapper {
 
-    public static FavouriteCardResponse mapToDto(Favourite favourite, Long userId) {
+    public static FavouriteCardResponse mapToDto(Favourite favourite) {
         PictureResponse pictureResponse = null;
 
         if(favourite.getPet().getPictures() == null || favourite.getPet().getPictures().isEmpty()){
@@ -26,7 +26,7 @@ public class FavouriteCardMapper {
         return FavouriteCardResponse.builder()
                 .id(favourite.getId())
                 .petId(favourite.getPet().getId())
-                .userId(userId)
+                .userId(favourite.getPet().getUser().getId())
                 .name(favourite.getPet().getName())
                 .race(favourite.getPet().getRace())
                 .pictureResponse(pictureResponse)
