@@ -25,6 +25,7 @@ public class FavouriteCardMapper {
 
         return FavouriteCardResponse.builder()
                 .id(favourite.getId())
+                .petId(favourite.getPet().getId())
                 .userId(userId)
                 .name(favourite.getPet().getName())
                 .race(favourite.getPet().getRace())

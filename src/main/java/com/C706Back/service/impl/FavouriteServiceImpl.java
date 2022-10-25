@@ -4,7 +4,6 @@ package com.C706Back.service.impl;
 import com.C706Back.exception.ResourceNotFoundException;
 import com.C706Back.mapper.FavouriteCardMapper;
 import com.C706Back.mapper.PetCardMapper;
-import com.C706Back.models.dto.request.FavouriteRequest;
 import com.C706Back.models.dto.response.FavouriteCardListResponse;
 import com.C706Back.models.dto.response.FavouriteCardResponse;
 import com.C706Back.models.dto.response.PetCardListResponse;
