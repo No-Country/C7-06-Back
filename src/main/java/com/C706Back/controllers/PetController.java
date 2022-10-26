@@ -74,6 +74,21 @@ public class PetController {
         return petService.listFilteredPets(animal, gender, startAgeParam, endAgeParam, raceParam, locationParam, pageNumber, pageSize, orderBy, sortDir);
     }
 
+    @RequestMapping(path = "/petIds", method = RequestMethod.GET)
+    private ResponseEntity<?> listPetIds(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws Exception {
+        if (!jwtUtils.verify(token))
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.user) && !role.equals(Role.admin)))
+            return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
+
+        Long userId = jwtUtils.getUserId(token);
+
+        return ResponseEntity.ok(petService.listPetIds(userId));
+    }
+
     @RequestMapping(path = "/pets/{petId}", method = RequestMethod.GET)
     private ResponseEntity<PetProfileResponse> getPet(@PathVariable(value = "petId") Long petId) {
         return ResponseEntity.ok(petService.getPetById(petId));

@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,9 +50,8 @@ public class FavouriteServiceImpl implements FavouriteService {
         Page<Favourite> page = favouriteRepository.findByUserId(userId, pageable);
         List<Favourite> favouriteList = page.getContent();
         List<FavouriteCardResponse> favouriteCardResponseList = favouriteList.stream()
-                .map(favourite -> {
-                    return FavouriteCardMapper.mapToDto(favourite);
-                }).collect(Collectors.toList());
+                .filter(favourite -> favourite.isFavourite())
+                .map(FavouriteCardMapper::mapToDto).collect(Collectors.toList());
 
         return FavouriteCardListResponse.builder()
                 .pageNumber(page.getNumber())
@@ -132,6 +132,23 @@ public class FavouriteServiceImpl implements FavouriteService {
     }
 
     @Override
+    public List<Long> listFavouritePetIds(Long userId) {
+        User user = userRepository
+                .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        List<Favourite> favourites = user.getFavourites();
+        List<Long> petIds = new ArrayList<>();
+        if(!favourites.isEmpty()){
+            petIds = favourites.stream()
+                    .map(favourite -> favourite.getPet().getId())
+                    .collect(Collectors.toList());
+            System.out.println("here");
+            petIds.forEach(System.out::println);
+        }
+        return petIds;
+    }
+
+    @Override
     public boolean getIfIsFavourite(Long userId, Long petId) {
         Pet pet = petRepository
                 .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
@@ -159,6 +176,58 @@ public class FavouriteServiceImpl implements FavouriteService {
         Pet pet = petRepository
                 .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
 
+        if(pet.getUser().getId() == userId)
+            throw new RuntimeException("You cannot add your own pet to favourites.");
+
+        User user = userRepository
+                .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+
+        List<Favourite> favourites = user.getFavourites();
+        Favourite favouriteInserted = null;
+
+        if(favourites.isEmpty()){
+            Favourite favourite = new Favourite();
+            favourite.setFavourite(true);
+            favourite.setPet(pet);
+            favourite.setUser(user);
+            favouriteInserted = favouriteRepository.save(favourite);
+        }
+
+        if(!favourites.isEmpty()){
+            Favourite favouriteFinded = favourites.stream()
+                    .filter(favourite -> favourite.getPet().equals(pet))
+                    .findFirst().orElse(null);
+
+            if(favouriteFinded != null){
+                if(favouriteFinded.isFavourite()){
+                    favouriteFinded.setFavourite(false);
+                } else {
+                    favouriteFinded.setFavourite(true);
+                }
+
+                favouriteInserted = favouriteRepository.save(favouriteFinded);
+            }
+
+            if(favouriteFinded == null){
+                Favourite favourite = new Favourite();
+                favourite.setFavourite(true);
+                favourite.setPet(pet);
+                favourite.setUser(user);
+                favouriteInserted = favouriteRepository.save(favourite);
+            }
+        }
+
+
+        return FavouriteCardMapper.mapToDto(favouriteInserted);
+    }
+
+    /*
+    @Override
+    public FavouriteCardResponse createFavourite(Long userId, Long petId) {
+        Pet pet = petRepository
+                .findById(petId).orElseThrow(() -> new ResourceNotFoundException("Pet", "id", petId));
+
         User user = userRepository
                 .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
@@ -171,7 +240,8 @@ public class FavouriteServiceImpl implements FavouriteService {
                     .filter(favourite -> favourite.getPet().equals(pet))
                     .findFirst().orElse(null);
 
-            if (favouriteFinded != null && favouriteFinded.isFavourite()) {
+            if (favouriteFinded != null) {
+                if(favouriteFinded.isFavourite())
                 favouriteFinded.setFavourite(false);
             } else {
                 favouriteFinded.setFavourite(true);
@@ -192,7 +262,7 @@ public class FavouriteServiceImpl implements FavouriteService {
             System.out.println("AQUI TMB");
         }
         return FavouriteCardMapper.mapToDto(favouriteInserted);
-    }
+    }*/
 
     @Override
     public void deleteFavourite(Long favouriteId) {

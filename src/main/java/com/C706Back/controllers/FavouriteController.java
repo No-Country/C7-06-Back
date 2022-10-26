@@ -52,6 +52,21 @@ public class FavouriteController {
         return new ResponseEntity<>(favouriteService.listSuggestedPets(userId, pageNumber, pageSize, orderBy, sortDir), HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/favouritePetIds", method = RequestMethod.GET)
+    private ResponseEntity<?> listFavouritePetIds(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws Exception{
+        if (!jwtUtils.verify(token))
+            return new ResponseEntity<>("User unauthorized", HttpStatus.UNAUTHORIZED);
+
+        Role role = jwtUtils.getRole(token);
+
+        if ((!role.equals(Role.user) && !role.equals(Role.admin)))
+            return new ResponseEntity<>("Yo do not have permissions", HttpStatus.UNAUTHORIZED);
+
+        Long userId = jwtUtils.getUserId(token);
+
+        return ResponseEntity.ok(favouriteService.listFavouritePetIds(userId));
+    }
+
     @RequestMapping(path = "/users/{userId}/favourites/{petId}", method = RequestMethod.GET)
     private ResponseEntity<?> getIfIsFavourite(@PathVariable(value = "petId") Long petId, @PathVariable(value = "userId") Long userId) {
         return ResponseEntity.ok(favouriteService.getIfIsFavourite(userId, petId));

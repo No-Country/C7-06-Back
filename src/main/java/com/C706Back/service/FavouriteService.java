@@ -5,11 +5,15 @@ import com.C706Back.models.dto.response.FavouriteCardListResponse;
 import com.C706Back.models.dto.response.FavouriteCardResponse;
 import com.C706Back.models.dto.response.PetCardListResponse;
 
+import java.util.List;
+
 public interface FavouriteService {
 
     FavouriteCardListResponse listFavouritesByUser(Long userId, int pageNumber, int pageSize, String orderBy, String sortDir);
 
     PetCardListResponse listSuggestedPets(Long userId, int pageNumber, int pageSize, String orderBy, String sortDir);
+
+    List<Long> listFavouritePetIds(Long userId);
 
     boolean getIfIsFavourite(Long userId, Long petId);
 

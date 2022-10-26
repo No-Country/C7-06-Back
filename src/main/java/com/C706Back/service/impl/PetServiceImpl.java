@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +80,21 @@ public class PetServiceImpl implements PetService {
                 .isLastPage(page.isLast())
                 .content(content)
                 .build();
+    }
+
+    @Override
+    public List<Long> listPetIds(Long userId) {
+        User user = userRepository
+                .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        List<Pet> pets = user.getPets();
+        List<Long> petIds = new ArrayList<>();
+        if (!pets.isEmpty()) {
+            petIds = pets.stream()
+                    .map(Pet::getId)
+                    .collect(Collectors.toList());
+        }
+        return petIds;
     }
 
     @Override

@@ -10,9 +10,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FavouriteCardResponse {
-    private Long id;
+    private Long favouriteId;
     private Long userId;
-    private Long petId;
+    private Long id;
     private PictureResponse pictureResponse;
     private String name;
     private String race;
